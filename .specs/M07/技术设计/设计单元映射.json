@@ -1,0 +1,79 @@
+[ {
+  "ruleId" : "RC-M07-01",
+  "designUnitIds" : [ "D-M07-02", "D-M07-06", "D-M07-08", "D-M07-10" ]
+}, {
+  "ruleId" : "RC-M07-02",
+  "designUnitIds" : [ "D-M07-02", "D-M07-06", "D-M07-08", "D-M07-09", "D-M07-10" ]
+}, {
+  "ruleId" : "RC-M07-03",
+  "designUnitIds" : [ "D-M07-02", "D-M07-06", "D-M07-10", "D-M07-11" ]
+}, {
+  "ruleId" : "RC-M07-04",
+  "designUnitIds" : [ "D-M07-03", "D-M07-08", "D-M07-11", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-05",
+  "designUnitIds" : [ "D-M07-02", "D-M07-06", "D-M07-11", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-06",
+  "designUnitIds" : [ "D-M07-02", "D-M07-03", "D-M07-09" ]
+}, {
+  "ruleId" : "RC-M07-07",
+  "designUnitIds" : [ "D-M07-01", "D-M07-05", "D-M07-08", "D-M07-09" ]
+}, {
+  "ruleId" : "RC-M07-08",
+  "designUnitIds" : [ "D-M07-03", "D-M07-05", "D-M07-10" ]
+}, {
+  "ruleId" : "RC-M07-09",
+  "designUnitIds" : [ "D-M07-04", "D-M07-11", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-10",
+  "designUnitIds" : [ "D-M07-01", "D-M07-07" ]
+}, {
+  "ruleId" : "RC-M07-11",
+  "designUnitIds" : [ "D-M07-01", "D-M07-04", "D-M07-11" ]
+}, {
+  "ruleId" : "RC-M07-12",
+  "designUnitIds" : [ "D-M07-09" ]
+}, {
+  "ruleId" : "RC-M07-13",
+  "designUnitIds" : [ "D-M07-01", "D-M07-02", "D-M07-03", "D-M07-09", "D-M07-11" ]
+}, {
+  "ruleId" : "RC-M07-14",
+  "designUnitIds" : [ "D-M07-02", "D-M07-07", "D-M07-08", "D-M07-11", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-15",
+  "designUnitIds" : [ "D-M07-08", "D-M07-10" ]
+}, {
+  "ruleId" : "RC-M07-16",
+  "designUnitIds" : [ "D-M07-08", "D-M07-12" ]
+}, {
+  "ruleId" : "RC-M07-17",
+  "designUnitIds" : [ "D-M07-08", "D-M07-10" ]
+}, {
+  "ruleId" : "RC-M07-18",
+  "designUnitIds" : [ "D-M07-01", "D-M07-08", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-19",
+  "designUnitIds" : [ "D-M07-01", "D-M07-08", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-20",
+  "designUnitIds" : [ "D-M07-01", "D-M07-08", "D-M07-10", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-21",
+  "designUnitIds" : [ "D-M07-03", "D-M07-05", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-22",
+  "designUnitIds" : [ "D-M07-03", "D-M07-10", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-23",
+  "designUnitIds" : [ "D-M07-04", "D-M07-08", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-24",
+  "designUnitIds" : [ "D-M07-04", "D-M07-10", "D-M07-13" ]
+}, {
+  "ruleId" : "RC-M07-25",
+  "designUnitIds" : [ "D-M07-01", "D-M07-07" ]
+}, {
+  "ruleId" : "RC-M07-26",
+  "designUnitIds" : [ "D-M07-01", "D-M07-07", "D-M07-08", "D-M07-11" ]
+} ]

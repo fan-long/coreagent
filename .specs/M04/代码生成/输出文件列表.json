@@ -1,0 +1,37 @@
+{
+  "代码列表": {
+    "后端": [
+      "src/main/java/com/musemvp/coreagent/api/AppTypeController.java",
+      "src/main/java/com/musemvp/coreagent/api/dto/AppTypeDictionaryVO.java",
+      "src/main/java/com/musemvp/coreagent/api/dto/AppTypeGroupVO.java",
+      "src/main/java/com/musemvp/coreagent/api/dto/AppTypeValueRequest.java",
+      "src/main/java/com/musemvp/coreagent/api/dto/AppTypeValueVO.java",
+      "src/main/java/com/musemvp/coreagent/domain/ComponentType.java",
+      "src/main/java/com/musemvp/coreagent/repository/ComponentTypeRepository.java",
+      "src/main/java/com/musemvp/coreagent/service/AppTypeGrouping.java",
+      "src/main/java/com/musemvp/coreagent/service/AppTypeRules.java",
+      "src/main/java/com/musemvp/coreagent/service/AppTypeService.java",
+      "src/main/java/com/musemvp/coreagent/support/AppTypeCatalog.java",
+      "src/main/java/com/musemvp/coreagent/support/ErrorCode.java",
+      "src/test/java/com/musemvp/coreagent/api/AppTypeControllerTest.java",
+      "src/test/java/com/musemvp/coreagent/service/AppTypeGroupingTest.java",
+      "src/test/java/com/musemvp/coreagent/service/AppTypeRulesTest.java",
+      "src/test/java/com/musemvp/coreagent/service/AppTypeServiceTest.java"
+    ],
+    "前端": [
+      "src/main/resources/static/css/app.css",
+      "src/main/resources/static/js/core/http.js",
+      "src/main/resources/static/js/main.js",
+      "src/main/resources/static/js/pages/AppType.js"
+    ]
+  },
+  "测试报告": [
+    ".specs/M04/代码生成/测试报告.md"
+  ],
+  "问题清单": [
+    ".specs/M04/代码生成/问题清单.json"
+  ],
+  "测试结果": [
+    ".specs/M04/代码生成/测试结果.json"
+  ]
+}

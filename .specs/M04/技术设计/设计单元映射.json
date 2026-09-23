@@ -1,0 +1,152 @@
+{
+  "designUnitNames": {
+    "D-M04-01": "应用类型字典读取接口",
+    "D-M04-02": "应用类型值新增接口",
+    "D-M04-03": "应用类型值编辑接口",
+    "D-M04-04": "应用类型值删除接口",
+    "D-M04-05": "应用类型整体删除接口",
+    "D-M04-06": "字段规范化与校验规则构件",
+    "D-M04-07": "排序与聚合口径构件",
+    "D-M04-08": "应用类型页构件",
+    "D-M04-09": "类型值供给契约构件",
+    "D-M04-10": "错误码与提示文案构件",
+    "D-M04-11": "应用类型数据访问构件",
+    "D-M04-12": "页面接入与请求扩展构件",
+    "D-M04-13": "应用类型变更的跨单元协作",
+    "D-M04-14": "常量与预置维度构件"
+  },
+  "rules": [
+    {
+      "ruleId": "RC-M04-01",
+      "designUnitIds": ["D-M04-02", "D-M04-03", "D-M04-06", "D-M04-08", "D-M04-10", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-02",
+      "designUnitIds": ["D-M04-02", "D-M04-03", "D-M04-06", "D-M04-08", "D-M04-10", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-03",
+      "designUnitIds": ["D-M04-01", "D-M04-02", "D-M04-03", "D-M04-06", "D-M04-10", "D-M04-11", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-04",
+      "designUnitIds": ["D-M04-02", "D-M04-03", "D-M04-06", "D-M04-08", "D-M04-10", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-05",
+      "designUnitIds": ["D-M04-02", "D-M04-07", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-06",
+      "designUnitIds": ["D-M04-01", "D-M04-07", "D-M04-11", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-07",
+      "designUnitIds": ["D-M04-04", "D-M04-08", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-08",
+      "designUnitIds": ["D-M04-05", "D-M04-07", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-09",
+      "designUnitIds": ["D-M04-04", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-10",
+      "designUnitIds": ["D-M04-05", "D-M04-07", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-11",
+      "designUnitIds": ["D-M04-05", "D-M04-06", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-12",
+      "designUnitIds": ["D-M04-04", "D-M04-05", "D-M04-09", "D-M04-11", "D-M04-13"]
+    },
+    {
+      "ruleId": "RC-M04-13",
+      "designUnitIds": ["D-M04-01", "D-M04-07", "D-M04-08", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-14",
+      "designUnitIds": ["D-M04-01", "D-M04-02", "D-M04-03", "D-M04-06", "D-M04-11", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-15",
+      "designUnitIds": ["D-M04-01", "D-M04-07", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-16",
+      "designUnitIds": ["D-M04-01", "D-M04-08"]
+    },
+    {
+      "ruleId": "RC-M04-17",
+      "designUnitIds": ["D-M04-01", "D-M04-08"]
+    },
+    {
+      "ruleId": "RC-M04-18",
+      "designUnitIds": ["D-M04-07", "D-M04-08"]
+    },
+    {
+      "ruleId": "RC-M04-19",
+      "designUnitIds": ["D-M04-01", "D-M04-08", "D-M04-10", "D-M04-12"]
+    },
+    {
+      "ruleId": "RC-M04-20",
+      "designUnitIds": ["D-M04-01", "D-M04-02", "D-M04-08"]
+    },
+    {
+      "ruleId": "RC-M04-21",
+      "designUnitIds": ["D-M04-02", "D-M04-08", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-22",
+      "designUnitIds": ["D-M04-03", "D-M04-08"]
+    },
+    {
+      "ruleId": "RC-M04-23",
+      "designUnitIds": ["D-M04-03", "D-M04-08", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-24",
+      "designUnitIds": ["D-M04-03", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-25",
+      "designUnitIds": ["D-M04-04", "D-M04-08", "D-M04-13"]
+    },
+    {
+      "ruleId": "RC-M04-26",
+      "designUnitIds": ["D-M04-05", "D-M04-08", "D-M04-10"]
+    },
+    {
+      "ruleId": "RC-M04-27",
+      "designUnitIds": ["D-M04-01", "D-M04-09", "D-M04-10", "D-M04-11"]
+    },
+    {
+      "ruleId": "RC-M04-28",
+      "designUnitIds": []
+    },
+    {
+      "ruleId": "RC-M04-29",
+      "designUnitIds": []
+    },
+    {
+      "ruleId": "RC-M04-30",
+      "designUnitIds": ["D-M04-08", "D-M04-12", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-31",
+      "designUnitIds": ["D-M04-02", "D-M04-03", "D-M04-08", "D-M04-10", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-32",
+      "designUnitIds": ["D-M04-02", "D-M04-08", "D-M04-13", "D-M04-14"]
+    },
+    {
+      "ruleId": "RC-M04-33",
+      "designUnitIds": ["D-M04-05", "D-M04-08", "D-M04-10"]
+    }
+  ]
+}

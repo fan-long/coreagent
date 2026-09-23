@@ -1,0 +1,32 @@
+server:
+  port: 18080
+
+spring:
+  application:
+    name: coreagent
+  datasource:
+    url: jdbc:mysql://ecs:3306/coreagent_demo?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: coreagent_demo
+    password: coreagent_demo
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  autoconfigure:
+    exclude:
+      # 项目不使用 Redis（由第三方依赖传递引入），排除其自动配置以关闭仓库扫描噪音
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+# 视觉主题令牌（ft-FT-002 §3.6）。运维级、非用户可见：无界面入口、无写接口，
+# 切换有效取值后需重启服务；前端刷新页面即取得新令牌（令牌接口 Cache-Control: no-store）。
+platform:
+  theme:
+    # dark-gold=黑金（默认）｜light=浅色（观察期回退，至 2026-10-02）
+    active: dark-gold
+    # true 时任一令牌非法即判定整包失败（交付前严格自检用）
+    strict: false
+    # 令牌包目录，便于后续外置化
+    token-location: classpath:theme/
+

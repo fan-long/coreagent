@@ -1,0 +1,406 @@
+[ {
+  "action" : "新增",
+  "id" : 446,
+  "caseName" : "M04-TC-01 类型为空或仅空白时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-01：GIVEN 新增类型值 WHEN 类型为空串或仅含空白字符并提交保存 THEN 拒绝保存并提示「请填写类型」。",
+  "precondition" : "已进入环境管理 / 模板管理 / 应用类型页，处于新增入口。",
+  "dataRequirement" : "分别构造类型为空串、仅含半角空格（如三个空格）、仅含全角空格三种输入，类型值合法；预期均被拒绝并提示「请填写类型」，component_type 记录数不变。",
+  "ruleIds" : "RC-M04-01"
+}, {
+  "action" : "新增",
+  "id" : 447,
+  "caseName" : "M04-TC-02 类型前后空白裁剪后保存（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-01：GIVEN 类型前后含空白字符 WHEN 提交保存 THEN 按裁剪后文本存储并归入裁剪后的类型。",
+  "precondition" : "已进入应用类型页的新增入口，字典中不存在类型「行业领域」。",
+  "dataRequirement" : "类型输入「  行业领域  」，类型值「金融」；预期 component_type.type 存储为「行业领域」，左侧类型列表展示裁剪后名称。",
+  "ruleIds" : "RC-M04-01"
+}, {
+  "action" : "新增",
+  "id" : 448,
+  "caseName" : "M04-TC-03 类型值前后空白裁剪后保存（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-02：GIVEN 类型值前后含空白字符 WHEN 提交保存 THEN 按裁剪后文本存储，且不与裁剪后的同名取值并存。",
+  "precondition" : "已进入应用类型页的新增入口；类型「行业领域」下不存在取值「金融」。",
+  "dataRequirement" : "类型「行业领域」，类型值输入「 金融 」；预期 component_type.value 存储为「金融」，取值表展示裁剪后文本。",
+  "ruleIds" : "RC-M04-02"
+}, {
+  "action" : "新增",
+  "id" : 449,
+  "caseName" : "M04-TC-04 类型值为空或仅空白时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-02：GIVEN 新增类型值 WHEN 类型值为空串或仅含空白字符并提交保存 THEN 拒绝保存并提示「请填写类型值」。",
+  "precondition" : "已进入应用类型页的新增入口，类型已填写为「行业领域」。",
+  "dataRequirement" : "分别构造类型值为空串、仅含半角空格、仅含制表符三种输入；预期均被拒绝并提示「请填写类型值」，component_type 记录数不变。",
+  "ruleIds" : "RC-M04-02"
+}, {
+  "action" : "新增",
+  "id" : 450,
+  "caseName" : "M04-TC-05 值说明留空或仅空白时按空字符串存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-03：GIVEN 值说明为空串或仅含空白字符 WHEN 提交保存 THEN 保存成功且不触发校验，库中按空字符串存储。",
+  "precondition" : "已进入应用类型页的新增入口，类型与类型值合法。",
+  "dataRequirement" : "类型「行业领域」、类型值「金融」，值说明分别置为空串与三个空格；预期两次均保存成功，component_type.description 存储为空字符串（长度 0）。",
+  "ruleIds" : "RC-M04-03"
+}, {
+  "action" : "新增",
+  "id" : 451,
+  "caseName" : "M04-TC-06 值说明前后空白裁剪后保存（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-03：GIVEN 值说明前后含空白字符 WHEN 提交保存 THEN 按裁剪后文本存储。",
+  "precondition" : "已进入应用类型页的新增入口，类型与类型值合法。",
+  "dataRequirement" : "值说明输入「  金融行业  」；预期 component_type.description 存储为「金融行业」。",
+  "ruleIds" : "RC-M04-03"
+}, {
+  "action" : "新增",
+  "id" : 452,
+  "caseName" : "M04-TC-07 值说明 255 字符边界保存成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-03：GIVEN 值说明长度恰为 255 个字符 WHEN 提交保存 THEN 保存成功，完整存储 255 字符。",
+  "precondition" : "已进入应用类型页的新增入口，类型与类型值合法（计数口径依据 Q-M04-09 结论）。",
+  "dataRequirement" : "构造长度为 255 个字符的值说明（含中英文混合）；预期保存成功，description 完整存储。",
+  "ruleIds" : "RC-M04-03"
+}, {
+  "action" : "新增",
+  "id" : 453,
+  "caseName" : "M04-TC-08 值说明 256 字符按超限口径处理（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-03：GIVEN 值说明长度为 256 个字符 WHEN 提交保存 THEN 按 Q-M04-09 结论处理（拒绝并提示超限文案，或按约定截断）。",
+  "precondition" : "已进入应用类型页的新增入口（超限处理口径依据 Q-M04-09 结论）。",
+  "dataRequirement" : "构造长度为 256 个字符的值说明；预期按 Q-M04-09 结论处理，不产生超出 varchar(255) 的存储值。",
+  "ruleIds" : "RC-M04-03"
+}, {
+  "action" : "新增",
+  "id" : 454,
+  "caseName" : "M04-TC-09 类型与类型值 64 字符边界保存成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-01 与 RC-M04-02：GIVEN 类型与类型值长度均恰为 64 个字符 WHEN 提交保存 THEN 保存成功。",
+  "precondition" : "已进入应用类型页的新增入口（计数口径依据 Q-M04-09 结论）。",
+  "dataRequirement" : "构造长度均为 64 个字符的类型与类型值；预期保存成功，type 与 value 完整存储 64 字符。",
+  "ruleIds" : "RC-M04-01,RC-M04-02"
+}, {
+  "action" : "新增",
+  "id" : 455,
+  "caseName" : "M04-TC-10 类型或类型值超长按超限口径处理（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-01 与 RC-M04-02：GIVEN 类型或类型值长度为 65 个字符 WHEN 提交保存 THEN 按 Q-M04-09 结论处理（拒绝并提示超限文案）。",
+  "precondition" : "已进入应用类型页的新增入口（超限处理口径依据 Q-M04-09 结论）。",
+  "dataRequirement" : "分别构造类型 65 字符、类型值 65 字符两种输入；预期均按 Q-M04-09 结论处理，不产生超过 varchar(64) 的存储值。",
+  "ruleIds" : "RC-M04-01,RC-M04-02"
+}, {
+  "action" : "新增",
+  "id" : 456,
+  "caseName" : "M04-TC-11 同类型下类型值重复时拒绝保存并提示（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-04 分支a：GIVEN 类型 X 下已存在类型值 Y WHEN 以相同类型 X 与类型值 Y 提交新增 THEN 拒绝保存并提示「类型「X」下已存在类型值「Y」」。",
+  "precondition" : "component_type 中已存在 (type='行业领域', value='金融') 的记录。",
+  "dataRequirement" : "以类型「行业领域」、类型值「金融」提交新增；预期拒绝保存，提示含「类型「行业领域」下已存在类型值「金融」」，记录数不变。",
+  "ruleIds" : "RC-M04-04"
+}, {
+  "action" : "新增",
+  "id" : 457,
+  "caseName" : "M04-TC-12 不同类型下相同类型值允许保存（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-04：GIVEN 类型 X 下已存在类型值 Y WHEN 以不同类型 Z 与相同类型值 Y 提交新增 THEN 保存成功，两个类型下各存在一条取值 Y。",
+  "precondition" : "component_type 中已存在 (type='行业领域', value='金融') 的记录；类型「用户对象」不存在取值「金融」。",
+  "dataRequirement" : "以类型「用户对象」、类型值「金融」提交新增；预期保存成功，唯一键 (type, value) 不冲突，左侧两个类型各自展示取值「金融」。本案例同时构成下游关联 value 单列引用歧义（Q-M04-01）的数据前提，需与 M04-TC-45 联合观察。",
+  "ruleIds" : "RC-M04-04"
+}, {
+  "action" : "新增",
+  "id" : 458,
+  "caseName" : "M04-TC-13 编辑时将类型值改为同类型下已存在值被拒绝（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-04 分支b：GIVEN 类型 X 下存在取值 Y1 与 Y2 WHEN 将 Y2 的类型值改为 Y1 后保存 THEN 拒绝保存并提示重复。",
+  "precondition" : "component_type 中存在 (type='行业领域', value='金融') 与 (type='行业领域', value='保险') 两条记录。",
+  "dataRequirement" : "编辑「保险」这条记录，将类型值改为「金融」后提交；预期拒绝保存并提示「类型「行业领域」下已存在类型值「金融」」，两条记录内容不变。",
+  "ruleIds" : "RC-M04-04,RC-M04-22"
+}, {
+  "action" : "新增",
+  "id" : 459,
+  "caseName" : "M04-TC-14 编辑时类型值与自身原值相同保存成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-04 分支b：GIVEN 类型 X 下存在取值 Y WHEN 仅修改该条的值说明并保持类型值不变 THEN 保存成功，不因排除自身失败而误判为重复。",
+  "precondition" : "component_type 中存在 (type='行业领域', value='金融') 的记录。",
+  "dataRequirement" : "将该条的值说明由空修改为「金融行业」，类型值保持「金融」；预期保存成功，description 更新为「金融行业」，记录 ID 不变。",
+  "ruleIds" : "RC-M04-04,RC-M04-22"
+}, {
+  "action" : "新增",
+  "id" : 460,
+  "caseName" : "M04-TC-15 新增时类型名称不存在则自动形成新类型（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-05 与 RC-M04-20：GIVEN 字典中不存在类型名称「新维度」 WHEN 新增一条该类型的取值并保存成功 THEN 自动形成新类型并出现在左侧类型列表，无需单独创建维度记录。",
+  "precondition" : "已进入应用类型页的新增入口；component_type 中不存在 type='新维度' 的记录。",
+  "dataRequirement" : "类型「新维度」、类型值「示例值」、值说明留空；预期保存成功，产生 1 条记录，左侧类型列表新增「新维度」且取值数量为 1，未产生任何独立的类型维度记录。",
+  "ruleIds" : "RC-M04-05,RC-M04-20"
+}, {
+  "action" : "新增",
+  "id" : 461,
+  "caseName" : "M04-TC-16 列表按排序号升序、同排序号按记录ID升序返回（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-06：GIVEN 存在多条取值记录且排序号非连续、存在同排序号的两条记录 WHEN 读取左侧类型列表与右侧取值表 THEN 按排序号升序返回，排序号相同时按记录 ID 升序返回。",
+  "precondition" : "component_type 中存在 4 条以上记录，其中两条 sort_order 相同且 id 不同。",
+  "dataRequirement" : "构造 sort_order 序列如 2、1、3、3（后两条同号）；预期返回顺序为 1、2、3(id 小)、3(id 大)。",
+  "ruleIds" : "RC-M04-06"
+}, {
+  "action" : "新增",
+  "id" : 462,
+  "caseName" : "M04-TC-17 预置维度按预设分类顺序展示（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-06：GIVEN 平台预置维度数据存在 WHEN 打开应用类型页 THEN 预置维度按预设分类顺序展示。",
+  "precondition" : "平台已完成预置维度初始化（清单与顺序依据 Q-M04-06 结论）。",
+  "dataRequirement" : "读取左侧类型列表；预期预置维度的展示顺序与预设分类顺序一致（顺序清单依据 Q-M04-06 结论）。",
+  "ruleIds" : "RC-M04-06"
+}, {
+  "action" : "新增",
+  "id" : 463,
+  "caseName" : "M04-TC-18 删除单条类型值不影响同类型下其它取值（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-07 与 RC-M04-25：GIVEN 某类型下存在 3 条取值 WHEN 删除其中 1 条 THEN 该条被移除，其余 2 条保留，左侧计数由 3 变为 2。",
+  "precondition" : "类型「行业领域」下存在「金融」「保险」「证券」3 条取值。",
+  "dataRequirement" : "删除「保险」；预期取值表剩余「金融」「证券」，左侧该类型取值数量由 3 变为 2，component_type 中其余记录内容不变。",
+  "ruleIds" : "RC-M04-07,RC-M04-25"
+}, {
+  "action" : "新增",
+  "id" : 464,
+  "caseName" : "M04-TC-19 删除整个类型时全部取值一并删除并提示（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-08 与 RC-M04-26：GIVEN 类型 X 下存在 N 条取值 WHEN 确认删除该类型 THEN 全部取值被删除，提示「类型「X」及其 N 条取值已删除」，左侧不再展示该类型。",
+  "precondition" : "类型「实时性要求」下存在 3 条取值；字典中另有其它类型。",
+  "dataRequirement" : "确认删除类型「实时性要求」；预期该类型 3 条取值全部删除，提示「类型「实时性要求」及其 3 条取值已删除」，左侧不再展示该类型，页脚类型总数 -1、取值总数 -3。",
+  "ruleIds" : "RC-M04-08,RC-M04-26"
+}, {
+  "action" : "新增",
+  "id" : 465,
+  "caseName" : "M04-TC-20 删除不存在的类型值记录时提示记录不存在（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-09：GIVEN 删除请求指向不存在的取值记录 WHEN 提交删除 THEN 拒绝操作并提示「应用类型记录不存在：X」。",
+  "precondition" : "构造记录 ID 不存在，或该记录已被先一步删除后再重复提交删除。",
+  "dataRequirement" : "提交删除不存在的记录 ID；预期拒绝并提示「应用类型记录不存在：X」（X 取值口径依据 Q-M04-10 结论），component_type 记录数不变。",
+  "ruleIds" : "RC-M04-09"
+}, {
+  "action" : "新增",
+  "id" : 466,
+  "caseName" : "M04-TC-21 删除不存在的类型时提示类型不存在（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-10：GIVEN 删除类型请求携带的类型名称在字典中不存在 WHEN 提交删除 THEN 拒绝操作并提示「类型不存在：X」。",
+  "precondition" : "component_type 中不存在 type='不存在的维度' 的任何记录。",
+  "dataRequirement" : "以类型名称「不存在的维度」提交删除类型；预期拒绝并提示「类型不存在：不存在的维度」，字典内容不变。",
+  "ruleIds" : "RC-M04-10"
+}, {
+  "action" : "新增",
+  "id" : 467,
+  "caseName" : "M04-TC-22 删除类型未指定类型名称时拒绝并提示（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-11：GIVEN 删除类型请求未携带类型名称 WHEN 提交删除 THEN 拒绝操作并提示「请指定类型」。",
+  "precondition" : "已进入应用类型页的删除类型入口。",
+  "dataRequirement" : "以空类型名称（未指定）提交删除类型；预期拒绝并提示「请指定类型」，字典内容不变。",
+  "ruleIds" : "RC-M04-11"
+}, {
+  "action" : "新增",
+  "id" : 468,
+  "caseName" : "M04-TC-23 删除被 Spec 组关联的类型值不联动清理关联（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-12 与 RC-M04-25：GIVEN 某类型值已被 Spec 组关联 WHEN 删除该取值 THEN 取值得以删除且全程无提示，specgroup_comptype_rel 中对应关联行保持原状。",
+  "precondition" : "类型值「金融」已存在，且 specgroup_comptype_rel 中存在 value='金融'（type 列标注其所属应用类型分类）的关联行。",
+  "dataRequirement" : "删除取值「金融」；预期删除成功且无任何提示，component_type 中该条被移除，specgroup_comptype_rel 中该关联行未被清理、其列值（含冗余列 type）未被本模块改写。关联行冗余列 type 的应然状态依据 Q-M04-01 结论。",
+  "ruleIds" : "RC-M04-12,RC-M04-25"
+}, {
+  "action" : "新增",
+  "id" : 469,
+  "caseName" : "M04-TC-24 类型列表聚合展示取值数量与页脚统计（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-13：GIVEN 字典中存在多个类型且各类型取值条数不同 WHEN 打开应用类型页 THEN 每个类型展示名称与取值数量，页脚展示「N个类型 · M条取值」。",
+  "precondition" : "component_type 中存在 3 个类型，取值条数分别为 2、1、4。",
+  "dataRequirement" : "读取左侧类型列表与页脚；预期各类型展示的取值数量为 2、1、4，页脚为「3个类型 · 7条取值」，与当前取值行实时统计一致。",
+  "ruleIds" : "RC-M04-13"
+}, {
+  "action" : "新增",
+  "id" : 470,
+  "caseName" : "M04-TC-25 应用类型值对象与表结构静态检查（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-14：GIVEN component_type 表存在数据 WHEN 检查表结构与字段约束 THEN 字段与唯一键符合要求，且无独立类型维度表。",
+  "precondition" : "数据库已按数据模型 v1 建表。",
+  "dataRequirement" : "检查 component_type 结构：id（主键，自增）、type（varchar(64) NOT NULL）、value（varchar(64) NOT NULL）、description（varchar(255)）、sort_order（int）；唯一键为 (type, value)；无 created_at / updated_at、无逻辑删除标志、无版本字段；不存在独立的类型维度表。",
+  "ruleIds" : "RC-M04-14"
+}, {
+  "action" : "新增",
+  "id" : 471,
+  "caseName" : "M04-TC-26 派生展示信息不单独存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-15：GIVEN 字典存在数据且页面已渲染 WHEN 检查数据存储载体 THEN 取值数量、类型总数与取值总数均无独立存储字段，全部由基础数据派生。",
+  "precondition" : "component_type 中存在多条记录，页面已渲染左侧列表与页脚。",
+  "dataRequirement" : "检查表结构无计数类字段，且左侧数量与页脚统计与 component_type 记录集合的实时统计一致。",
+  "ruleIds" : "RC-M04-15"
+}, {
+  "action" : "新增",
+  "id" : 472,
+  "caseName" : "M04-TC-27 打开应用类型页默认展示首个类型的取值表（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-16：GIVEN 字典中存在多个类型 WHEN 打开应用类型页 THEN 左侧按类型聚合展示名称与取值数量，右侧默认展示排序首位类型的取值表（类型值、值说明、操作列）。",
+  "precondition" : "component_type 中存在 3 个类型，排序号明确（排序口径依据 RC-M04-06）。",
+  "dataRequirement" : "打开页面；预期右侧默认展示排序首位类型（依 RC-M04-06 口径判定）的取值表，表头含类型值、值说明、操作列，行内容与库中记录一致。",
+  "ruleIds" : "RC-M04-16"
+}, {
+  "action" : "新增",
+  "id" : 473,
+  "caseName" : "M04-TC-28 字典中无任何类型时展示空态（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-17：GIVEN component_type 无任何记录 WHEN 打开应用类型页 THEN 右侧展示空态「暂无应用类型，点击右上角「新增」添加」，主操作可用。",
+  "precondition" : "清空 component_type 全部记录。",
+  "dataRequirement" : "打开页面；预期右侧展示空态「暂无应用类型，点击右上角「新增」添加」，左侧无类型项，「新增」主操作可用且点击可进入新增入口。",
+  "ruleIds" : "RC-M04-17"
+}, {
+  "action" : "新增",
+  "id" : 474,
+  "caseName" : "M04-TC-29 所选类型下无取值时展示空态（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-18：GIVEN 所选类型下无取值 WHEN 查看右侧取值表 THEN 展示空态「该类型下暂无取值，点击右上角「新增」添加」。",
+  "precondition" : "构造左侧可选类型但其下无取值行的状态（触发条件依据 Q-M04-05 附带的实现口径结论）。",
+  "dataRequirement" : "选中该类型；预期右侧取值表展示空态「该类型下暂无取值，点击右上角「新增」添加」，不展示表头数据行。",
+  "ruleIds" : "RC-M04-18"
+}, {
+  "action" : "新增",
+  "id" : 475,
+  "caseName" : "M04-TC-30 字典接口不可用时展示失败提示而非空态（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-19：GIVEN 字典读取接口不可用 WHEN 打开应用类型页 THEN 展示失败提示，不展示为空态文案，不白屏。",
+  "precondition" : "构造字典读取接口返回失败或超时。",
+  "dataRequirement" : "打开页面；预期展示失败提示而非「暂无应用类型…」空态文案，页面不白屏；提示形式依据 Q-M04-12 结论。",
+  "ruleIds" : "RC-M04-19"
+}, {
+  "action" : "新增",
+  "id" : 476,
+  "caseName" : "M04-TC-31 新增保存成功后取值出现并同步计数（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-20：GIVEN 类型与类型值合法且同类型下不重复 WHEN 保存成功 THEN 新取值出现在对应类型的取值表中，左侧取值数量与页脚取值总数同步更新。",
+  "precondition" : "类型「行业领域」下已有 2 条取值，页脚取值总数为 M。",
+  "dataRequirement" : "新增类型「行业领域」、类型值「信托」；预期保存成功，取值表新增 1 行，左侧取值数量由 2 变为 3，页脚取值总数由 M 变为 M+1。",
+  "ruleIds" : "RC-M04-20"
+}, {
+  "action" : "新增",
+  "id" : 477,
+  "caseName" : "M04-TC-32 新增保存失败时保留输入且不写入本地字典（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-21：GIVEN 新增保存请求失败 WHEN 提交 THEN 新增输入保留并提示失败原因，本地字典不出现该取值。",
+  "precondition" : "构造新增保存接口失败。",
+  "dataRequirement" : "以合法类型与类型值提交新增并令接口失败；预期输入内容保留、提示失败原因，刷新后列表不出现该取值；输入载体依据 Q-M04-02 结论。",
+  "ruleIds" : "RC-M04-21"
+}, {
+  "action" : "新增",
+  "id" : 478,
+  "caseName" : "M04-TC-33 编辑保存成功后按新类型重新归组（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-22：GIVEN 某类型下存在取值 Y WHEN 修改其类型值或值说明后保存成功 THEN 表格展示最新内容并按新类型重新归组，记录标识不变。",
+  "precondition" : "类型「行业领域」下存在取值「金融」；类型「用户对象」存在。",
+  "dataRequirement" : "将该条的类型改为「用户对象」、值说明改为「金融行业」；预期保存成功，该条从「行业领域」取值表移至「用户对象」取值表，记录 ID 不变，两侧计数同步更新。类型名修改的生效范围依据 Q-M04-03 结论。",
+  "ruleIds" : "RC-M04-22"
+}, {
+  "action" : "新增",
+  "id" : 479,
+  "caseName" : "M04-TC-34 编辑保存失败时回显修改前内容（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-23：GIVEN 编辑保存请求失败 WHEN 提交 THEN 表格回显修改前内容并提示失败原因，库中记录保持修改前的值。",
+  "precondition" : "存在一条取值记录，构造编辑保存接口失败。",
+  "dataRequirement" : "修改类型值与值说明后提交并令接口失败；预期表格回显原类型值与原值说明，提示失败原因，component_type 中该记录字段值未变。",
+  "ruleIds" : "RC-M04-23"
+}, {
+  "action" : "新增",
+  "id" : 480,
+  "caseName" : "M04-TC-35 编辑不存在的记录时提示记录不存在（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-24：GIVEN 编辑保存请求指向不存在的记录 WHEN 提交 THEN 拒绝并提示「应用类型记录不存在：X」，不新增记录、不改动其它取值。",
+  "precondition" : "构造记录 ID 不存在的编辑请求（或该记录已被删除后再次提交编辑）。",
+  "dataRequirement" : "提交编辑；预期提示「应用类型记录不存在：X」（X 取值口径依据 Q-M04-10 结论），component_type 记录数与其它记录内容不变，不得静默转为新增。",
+  "ruleIds" : "RC-M04-24"
+}, {
+  "action" : "新增",
+  "id" : 481,
+  "caseName" : "M04-TC-36 Spec 模板页关联编辑按类型分组展示全部类型值（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-27：GIVEN 字典中存在多个类型与多个类型值 WHEN 在 Spec 模板页打开关联编辑 THEN 按类型分组展示字典中的全部类型值供勾选。",
+  "precondition" : "component_type 中存在 3 个类型共 7 条取值；已进入 Spec 模板页的关联编辑。",
+  "dataRequirement" : "打开关联编辑；预期按类型分组展示全部 7 条类型值供勾选，分组与取值集合和字典一致；勾选对象的粒度（仅 value 还是 type + value）与其在 specgroup_comptype_rel 中的落库形态（含冗余列 type 是否写入）依据 Q-M04-01 结论；责任主体依据 Q-M04-04 结论。",
+  "ruleIds" : "RC-M04-27"
+}, {
+  "action" : "新增",
+  "id" : 482,
+  "caseName" : "M04-TC-37 Spec 组已关联以徽标展示、未关联展示未关联文案（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-28：GIVEN 某 Spec 组已勾选部分类型值、另一 Spec 组未勾选 WHEN 分别查看 THEN 已勾选以徽标形式展示，未勾选展示「未关联应用类型值」。",
+  "precondition" : "Spec 组 A 已关联 2 个类型值（specgroup_comptype_rel 中存在对应关联行）；Spec 组 B 未关联任何类型值。",
+  "dataRequirement" : "分别查看两个 Spec 组；预期 A 以徽标展示已关联的 2 个类型值，B 展示「未关联应用类型值」；徽标所需类型维度的来源（关联行冗余列 type 或 component_type 关联取得）依据 Q-M04-01 结论，责任主体依据 Q-M04-04 结论。",
+  "ruleIds" : "RC-M04-28"
+}, {
+  "action" : "新增",
+  "id" : 483,
+  "caseName" : "M04-TC-38 字典为空时关联编辑展示引导文案（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-29：GIVEN 应用类型字典为空 WHEN 打开 Spec 组关联编辑 THEN 展示「暂无可选的应用类型值，请先在「应用类型」页维护」，不展示空勾选面板。",
+  "precondition" : "component_type 无任何记录。",
+  "dataRequirement" : "打开 Spec 组关联编辑；预期展示引导文案，不展示空的勾选面板；责任主体依据 Q-M04-04 结论。",
+  "ruleIds" : "RC-M04-29"
+}, {
+  "action" : "新增",
+  "id" : 484,
+  "caseName" : "M04-TC-39 应用类型页标题说明主操作与元素静态检查（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-30：GIVEN 进入环境管理 / 模板管理 / 应用类型 WHEN 检查页面结构 THEN 标题、说明、主操作与元素清单符合要求，点击左侧类型切换右侧内容。",
+  "precondition" : "字典中存在多个类型。",
+  "dataRequirement" : "检查页面：标题「应用类型」；说明为规定文案；主操作右上角「新增」；左侧含类型名、取值数、选中态与页脚「N个类型 · M条取值」；右侧含类型值、值说明、操作列；点击另一类型后右侧内容随之切换。",
+  "ruleIds" : "RC-M04-30"
+}, {
+  "action" : "新增",
+  "id" : 485,
+  "caseName" : "M04-TC-40 类型值表格行元素与行内编辑静态检查（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-31：GIVEN 查看右侧取值表的表格行 WHEN 检查行内元素并执行一次行内编辑 THEN 元素与占位文案符合要求，保存失败以浮动提示给出原因且行内容保留。",
+  "precondition" : "某类型下存在取值记录；构造一次行内保存失败。",
+  "dataRequirement" : "检查行内含类型值输入框（占位「类型值，如 金融」）、值说明输入框（占位「取值含义，可留空」）、保存与删除按钮，新增行含取消按钮；行内编辑后点击保存提交；失败时浮动提示给出原因且行内容保留。",
+  "ruleIds" : "RC-M04-31"
+}, {
+  "action" : "新增",
+  "id" : 486,
+  "caseName" : "M04-TC-41 新增入口元素与保存取消行为检查（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-32：GIVEN 点击应用类型页右上角「新增」 WHEN 检查新增界面并执行保存与取消 THEN 元素与操作符合要求，保存成功后关闭并刷新主从视图，取消后关闭且不写入。",
+  "precondition" : "左侧已选中类型「行业领域」，字典中存在该类型。",
+  "dataRequirement" : "检查：标题「新增」；说明为规定文案；主操作「保存」、次要操作「取消」；类型名称默认回填「行业领域」，含类型值、值说明；保存成功后界面关闭且主从视图刷新；再次进入后点击取消，界面关闭且 component_type 记录数不变（形态依据 Q-M04-02 结论）。",
+  "ruleIds" : "RC-M04-32"
+}, {
+  "action" : "新增",
+  "id" : 487,
+  "caseName" : "M04-TC-42 删除类型入口危险样式与删除前提示检查（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-33：GIVEN 查看右侧详情标题行 WHEN 检查「删除类型」入口并触发删除 THEN 入口位置与样式符合要求，删除执行前提示将连同该类型下全部取值一并删除。",
+  "precondition" : "左侧已选中某类型，其下存在多条取值。",
+  "dataRequirement" : "检查「删除类型」位于右侧详情标题行且为危险样式；点击后出现提示，提示内容含「将连同该类型下全部取值一并删除」的语义，取消后字典内容不变。",
+  "ruleIds" : "RC-M04-33"
+}, {
+  "action" : "新增",
+  "id" : 488,
+  "caseName" : "M04-TC-43 新增三字段校验联合反向验证（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-01、RC-M04-02、RC-M04-04 联合：GIVEN 依次构造类型为空、类型值为空、同类型下类型值重复三种输入 WHEN 分别提交新增 THEN 均被拒绝并给出各自对应的提示。",
+  "precondition" : "类型「行业领域」下已存在取值「金融」。",
+  "dataRequirement" : "分别提交：类型为空+类型值合法、类型合法+类型值为空、类型「行业领域」+类型值「金融」；预期提示分别为「请填写类型」「请填写类型值」「类型「行业领域」下已存在类型值「金融」」，三次均不产生新记录；任一分支未按预期拒绝即判定不满足。",
+  "ruleIds" : "RC-M04-01,RC-M04-02,RC-M04-04"
+}, {
+  "action" : "新增",
+  "id" : 489,
+  "caseName" : "M04-TC-44 删除类型后提示计数与列表一致性联合验证（正向）",
+  "direction" : "正向",
+  "description" : "RC-M04-08、RC-M04-13、RC-M04-26 联合：GIVEN 类型 X 下存在 N 条取值 WHEN 删除类型 X THEN 提示中的 N 与删除前取值条数一致，左侧列表与页脚统计同步更新。",
+  "precondition" : "类型「实时性要求」下存在 3 条取值；字典中另有 2 个类型共 5 条取值，页脚为「3个类型 · 8条取值」。",
+  "dataRequirement" : "删除类型「实时性要求」并在同一会话内连续观察提示、左侧列表与页脚；预期提示「类型「实时性要求」及其 3 条取值已删除」，左侧不再展示该类型，其它类型及计数不变，页脚变为「2个类型 · 5条取值」。",
+  "ruleIds" : "RC-M04-08,RC-M04-13,RC-M04-26"
+}, {
+  "action" : "新增",
+  "id" : 490,
+  "caseName" : "M04-TC-45 删除类型值与 Spec 组关联一致性联合验证（反向）",
+  "direction" : "反向",
+  "description" : "RC-M04-12、RC-M04-27 联合：GIVEN 类型值 Y 已被 Spec 组关联 WHEN 删除取值 Y 并再次打开关联编辑 THEN 删除成功且无提示、关联行保持原状、可选集合不再包含 Y。",
+  "precondition" : "取值「金融」已被 Spec 组 A 关联，specgroup_comptype_rel 中存在对应关联行（value='金融'，type 列标注该取值所属应用类型分类）。",
+  "dataRequirement" : "删除取值「金融」；预期删除成功且全程无提示，specgroup_comptype_rel 中该关联行保持原状、其列值（含冗余列 type）未被本模块改写；再次打开 Spec 组 A 的关联编辑，可选集合不再包含「金融」，已有关联的展示口径依据 Q-M04-07 结论，悬空关联行类型维度的呈现依据 Q-M04-01 结论；仅局部成立不足以判定满足。",
+  "ruleIds" : "RC-M04-12,RC-M04-27"
+} ]

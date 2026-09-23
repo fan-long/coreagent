@@ -1,0 +1,424 @@
+[ {
+  "action" : "复用",
+  "id" : 134,
+  "caseName" : "M01-TC-02 组件卡片信息完整性（正向）",
+  "direction" : "正向",
+  "description" : "CAP-M01-01 验收预期第2条：GIVEN 查看某组件卡片 WHEN 展示 THEN 含组件图标、名称、状态、功能范围与三项指标（阻塞事项数、任务数量、规则数量）。",
+  "precondition" : "组件已配置图标与功能范围；组件默认工程下存在打开状态问题、任务与规则数据。",
+  "dataRequirement" : "组件 A：图标 icon-x，功能范围文本已填；默认工程含 2 条打开状态问题、5 条任务、8 条规则。",
+  "ruleIds" : "RC-M01-17"
+}, {
+  "action" : "复用",
+  "id" : 135,
+  "caseName" : "M01-TC-03 未设置主任务类型时任务数量指标占位（反向）",
+  "direction" : "反向",
+  "description" : "CAP-M01-01 验收预期第3条：GIVEN 某组件未设置主任务类型 WHEN 查看任务数量指标 THEN 不展示具体口径名称，仅展示占位。",
+  "precondition" : "组件存在但 main_task_type 为空。",
+  "dataRequirement" : "组件 B：component_definition.main_task_type 为空，其余字段正常。",
+  "ruleIds" : "RC-M01-18"
+}, {
+  "action" : "复用",
+  "id" : 136,
+  "caseName" : "M01-TC-04 工作台组件卡片网格展示（正向）",
+  "direction" : "正向",
+  "description" : "CAP-M01-01 验收预期第1条：GIVEN 当前项目存在若干组件 WHEN 进入工作台 THEN 以卡片网格展示全部组件。",
+  "precondition" : "当前项目下已存在多个组件。",
+  "dataRequirement" : "project_info 1 条作为当前项目；component_definition 3 条归属该项目（组件A、组件B、组件C），全部组件均应在工作台出现且不遗漏。",
+  "ruleIds" : "RC-M01-16"
+}, {
+  "action" : "复用",
+  "id" : 137,
+  "caseName" : "M01-TC-05 组件卡片底部默认工程信息展示（正向）",
+  "direction" : "正向",
+  "description" : "CAP-M01-01 验收预期第4条：GIVEN 某组件存在默认工程 WHEN 查看卡片底部 THEN 展示需求规格、工程数量与默认工程版本。",
+  "precondition" : "组件已关联需求规格，且下挂多个工程仓库并存在默认工程。",
+  "dataRequirement" : "组件A：spec_group_id 指向 spec_group_definition.name='交易类需求规格'；component_repository 2 条，is_default=1 的 version='v1.0.0'，另一条 version='v1.1.0'；预期卡片底部展示需求规格名称、工程数量 2 与默认工程版本 v1.0.0。",
+  "ruleIds" : "RC-M01-19"
+}, {
+  "action" : "新增",
+  "id" : 271,
+  "caseName" : "M01-TC-06 工作台组件卡片启用顺序排序（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-01：GIVEN 当前项目下同时存在启用与未启用组件 WHEN 进入工作台 THEN 全部启用组件排在全部未启用组件之前。",
+  "precondition" : "当前项目下存在至少 1 个启用组件与 1 个未启用组件。",
+  "dataRequirement" : "project_info 1 条；component_definition 3 条归属该项目，其中组件A、组件B 状态为启用，组件C 状态为未启用（取值依据 DEF-M01-22）；预期卡片次序为 组件A、组件B 在前，组件C 在后。",
+  "ruleIds" : "RC-M01-01"
+}, {
+  "action" : "新增",
+  "id" : 272,
+  "caseName" : "M01-TC-07 未启用组件卡片置灰且可点击进入（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-02：GIVEN 存在未启用组件 WHEN 查看其卡片 THEN 卡片置灰，且点击后仍进入该组件的组件信息，不被拦截。",
+  "precondition" : "当前项目下存在状态为未启用的组件C。",
+  "dataRequirement" : "component_definition 1 条：组件C，status 为未启用；预期卡片呈置灰表现，点击后侧边栏展示组件C 的组件信息导航。",
+  "ruleIds" : "RC-M01-02"
+}, {
+  "action" : "新增",
+  "id" : 273,
+  "caseName" : "M01-TC-08 点击组件卡片进入组件信息并默认选中默认工程仓库（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-20：GIVEN 组件为启用状态且存在默认工程仓库 WHEN 点击该组件卡片 THEN 进入该组件信息视图，侧边栏切换为组件信息导航，工程仓库选择器默认选中默认工程仓库。",
+  "precondition" : "组件A 为启用状态，下挂 2 个工程仓库且其中 1 个 is_default=1。",
+  "dataRequirement" : "component_definition 组件A（status 启用）；component_repository 2 条（is_default=1 的 version='v1.0.0'，另一条 version='v1.1.0'）；预期选择器默认选中 v1.0.0 对应的工程仓库。",
+  "ruleIds" : "RC-M01-20"
+}, {
+  "action" : "新增",
+  "id" : 274,
+  "caseName" : "M01-TC-09 工作台管理组件跳转应用组件页（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-21：GIVEN 处于工作台 WHEN 点击主操作「管理组件」THEN 跳转到应用组件页（环境管理 / 项目配置 / 应用组件）。",
+  "precondition" : "已进入工作台。",
+  "dataRequirement" : "project_info 1 条作为当前项目；预期目标页面为环境管理-项目配置-应用组件。",
+  "ruleIds" : "RC-M01-21"
+}, {
+  "action" : "新增",
+  "id" : 275,
+  "caseName" : "M01-TC-10 一级导航工作台切换至环境管理（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-22 分支a：GIVEN 当前在工作台 WHEN 点击一级导航「环境管理」THEN 展示环境管理二级导航并进入项目信息页，且该项高亮。",
+  "precondition" : "已登录平台并处于工作台。",
+  "dataRequirement" : "project_info 至少 1 条；预期侧边栏展示环境管理四组导航，主区域为项目信息页，一级导航「环境管理」高亮。",
+  "ruleIds" : "RC-M01-22"
+}, {
+  "action" : "新增",
+  "id" : 276,
+  "caseName" : "M01-TC-11 一级导航环境管理切换至工作台（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-22 分支b：GIVEN 当前在环境管理 WHEN 点击一级导航「工作台」THEN 隐藏二级导航并展示工作台。",
+  "precondition" : "已进入环境管理。",
+  "dataRequirement" : "project_info 至少 1 条；预期侧边栏隐藏，主区域展示工作台组件卡片网格。",
+  "ruleIds" : "RC-M01-22"
+}, {
+  "action" : "新增",
+  "id" : 277,
+  "caseName" : "M01-TC-12 环境管理二级导航分组与组内页面顺序（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-03 分支a 与分支b：GIVEN 进入环境管理 WHEN 查看侧边栏 THEN 依次展示项目配置（项目信息、应用组件、技术框架）、知识库管理（系统特性）、模板管理（应用类型、Spec模板）、系统配置（模型配置、通用Agent集成、Skill配置、Agent配置、工作流配置）。",
+  "precondition" : "已进入环境管理。",
+  "dataRequirement" : "无需业务数据；预期分组顺序与组内 11 个页面条目与 DEF-M01-12 完全一致，无增减与重排。",
+  "ruleIds" : "RC-M01-03"
+}, {
+  "action" : "新增",
+  "id" : 278,
+  "caseName" : "M01-TC-13 环境管理页面数据加载失败时保留结构并提示（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-24：GIVEN 环境管理某页面依赖的数据加载失败 WHEN 打开该页面 THEN 保留页面结构并提示失败，不白屏。",
+  "precondition" : "构造环境管理某页面依赖接口返回错误。",
+  "dataRequirement" : "通过模拟接口异常使页面主数据加载失败；预期页面头部与骨架保留，展示失败提示，无白屏。",
+  "ruleIds" : "RC-M01-24"
+}, {
+  "action" : "新增",
+  "id" : 279,
+  "caseName" : "M01-TC-14 组件无工程仓库时不展示工程维度菜单（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-04 分支b：GIVEN 组件无任何工程仓库 WHEN 进入该组件信息 THEN 不展示工程维度菜单，改为提示先创建工程仓库。",
+  "precondition" : "存在无工程仓库的组件D。",
+  "dataRequirement" : "component_definition 组件D 1 条；component_repository 中无 component_id=组件D 的记录；预期侧边栏工程维度区域不出现任务管理等菜单，展示先创建工程仓库的提示。",
+  "ruleIds" : "RC-M01-04"
+}, {
+  "action" : "新增",
+  "id" : 280,
+  "caseName" : "M01-TC-15 需求文档菜单名称取关联需求规格名称（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-05：GIVEN 组件已关联需求规格 WHEN 查看「需求文档」菜单 THEN 菜单名称为该规格名称，悬停说明展示「需求规格：{名称}」。",
+  "precondition" : "组件A 的 spec_group_id 指向存在且有效的 spec_group_definition 记录。",
+  "dataRequirement" : "spec_group_definition 1 条，name='交易类需求规格'；component_definition 组件A 的 spec_group_id 指向该记录；预期菜单名称为「交易类需求规格」，悬停提示为「需求规格：交易类需求规格」。",
+  "ruleIds" : "RC-M01-05"
+}, {
+  "action" : "新增",
+  "id" : 281,
+  "caseName" : "M01-TC-16 未关联需求规格时需求文档菜单使用默认名称（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-05：GIVEN 组件未关联需求规格 WHEN 查看「需求文档」菜单 THEN 菜单名称为默认名称「传统软件需求」，并保留悬停说明。",
+  "precondition" : "组件E 的 spec_group_id 为空。",
+  "dataRequirement" : "component_definition 组件E：spec_group_id 为空，其余字段正常；预期菜单名称为「传统软件需求」。",
+  "ruleIds" : "RC-M01-05"
+}, {
+  "action" : "新增",
+  "id" : 282,
+  "caseName" : "M01-TC-17 接口设计与测试案例菜单按主任务类型命名（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-06 分支a：GIVEN 组件已设置主任务类型 WHEN 查看「接口设计」「测试案例」菜单 THEN 菜单名称由该任务类型名称加固定后缀组成。",
+  "precondition" : "组件A 的 main_task_type 指向规格组下 name='模块' 的任务类型；固定后缀取值依据 Q-M01-06 结论。",
+  "dataRequirement" : "task_type 1 条：spec_group_id 对应组件A 的 spec_group_id，code='tx'，name='模块'；component_definition 组件A 的 main_task_type='tx'；预期菜单名称为「模块接口设计」「模块测试案例」。",
+  "ruleIds" : "RC-M01-06"
+}, {
+  "action" : "新增",
+  "id" : 283,
+  "caseName" : "M01-TC-18 数据模型菜单名称固定不随主任务类型变化（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-06 分支b：GIVEN 组件已设置主任务类型 WHEN 查看「数据模型」菜单 THEN 菜单名称为「组件数据模型」，不随主任务类型变化。",
+  "precondition" : "组件A 的 main_task_type 指向 name='模块' 的任务类型。",
+  "dataRequirement" : "component_definition 组件A：main_task_type='tx'；预期无论任务类型名称如何，「数据模型」菜单名称均为「组件数据模型」。",
+  "ruleIds" : "RC-M01-06"
+}, {
+  "action" : "新增",
+  "id" : 284,
+  "caseName" : "M01-TC-19 主任务类型未设置时接口设计菜单不含类型前缀（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-06 分支c：GIVEN 组件未设置主任务类型 WHEN 查看「接口设计」「测试案例」菜单 THEN 菜单名称不含类型前缀。",
+  "precondition" : "组件B 的 main_task_type 为空。",
+  "dataRequirement" : "component_definition 组件B：main_task_type 为空，其余字段正常；预期菜单名称中不含任何任务类型名称前缀。",
+  "ruleIds" : "RC-M01-06"
+}, {
+  "action" : "新增",
+  "id" : 285,
+  "caseName" : "M01-TC-20 接口定义入口在任务类型未配置 Agent 时置灰（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-07：GIVEN 对应任务类型未配置 Agent WHEN 查看「接口定义」「数据模型」入口 THEN 入口置灰，且悬停提示指引配置位置。",
+  "precondition" : "组件A 对应任务类型的 Agent 配置为空（判定口径依据 Q-M01-07 结论）。",
+  "dataRequirement" : "task_type 记录中 extract_agent / plan_agent / assist_agent 按 Q-M01-07 约定的判定字段全部为空；预期入口不可点击且悬停提示包含配置位置指引。",
+  "ruleIds" : "RC-M01-07"
+}, {
+  "action" : "新增",
+  "id" : 286,
+  "caseName" : "M01-TC-21 服务编排全景入口在框架不支持编排时置灰（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-08：GIVEN 当前工程的应用开发框架不支持编排模式 WHEN 查看「服务编排全景」入口 THEN 入口置灰并提示框架不支持。",
+  "precondition" : "组件A 的默认工程 app_framework 指向 tech_framework.orches=0 的框架记录。",
+  "dataRequirement" : "tech_framework 1 条：id='fw-no-orches'，orches=0；component_repository.app_framework='fw-no-orches'；预期入口置灰且提示框架不支持。",
+  "ruleIds" : "RC-M01-08"
+}, {
+  "action" : "新增",
+  "id" : 287,
+  "caseName" : "M01-TC-22 规则库全景入口在基础框架不支持规则库时置灰（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-09：GIVEN 当前工程的基础技术框架不支持规则库模式 WHEN 查看「规则库全景」入口 THEN 入口置灰并提示框架不支持。",
+  "precondition" : "组件A 的默认工程 base_framework 指向 tech_framework.rulelib=0 的框架记录。",
+  "dataRequirement" : "tech_framework 1 条：id='fw-no-rulelib'，rulelib=0；component_repository.base_framework='fw-no-rulelib'；预期入口置灰且提示框架不支持。",
+  "ruleIds" : "RC-M01-09"
+}, {
+  "action" : "新增",
+  "id" : 288,
+  "caseName" : "M01-TC-23 切换工程仓库后工程维度内容重新加载（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-12：GIVEN 组件存在多个工程仓库且各挂有任务、问题与代码库数据 WHEN 切换工程仓库 THEN 任务管理、代码库、问题跟踪内容按新工程仓库重新加载。",
+  "precondition" : "组件A 下存在 2 个工程仓库，各自挂有 task_instance、issue_tracking 与代码库数据。",
+  "dataRequirement" : "component_repository 2 条（R1、R2）；task_instance、issue_tracking 分别按 repository_id 归属 R1 与 R2；预期切换后各页面数据的 repository_id 与所选工程仓库一致。",
+  "ruleIds" : "RC-M01-12"
+}, {
+  "action" : "新增",
+  "id" : 289,
+  "caseName" : "M01-TC-24 工程仓库选择器选项格式与默认工程标记（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-25：GIVEN 组件存在多个工程仓库 WHEN 查看侧边栏顶部与工程仓库选择器 THEN 展示组件图标、名称、工程仓库数量与工程仓库管理入口，选择器选项为「工程名称-版本号(默认)」。",
+  "precondition" : "组件A 下存在 2 个工程仓库，其中 1 个为默认工程。",
+  "dataRequirement" : "component_repository 2 条：name='交易工程'，version 分别为 'v1.0.0'（is_default=1）与 'v1.1.0'；预期顶部展示工程仓库数量 2，选项文本为「交易工程-v1.0.0(默认)」与「交易工程-v1.1.0」。",
+  "ruleIds" : "RC-M01-25"
+}, {
+  "action" : "新增",
+  "id" : 290,
+  "caseName" : "M01-TC-25 项目切换弹窗当前项目标记且无切换按钮（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-26：GIVEN 点击顶栏当前项目名称 WHEN 弹窗打开 THEN 列表展示全部项目，当前项目标记「当前」且无切换按钮。",
+  "precondition" : "平台内存在多个项目，当前项目为其中之一。",
+  "dataRequirement" : "project_info 3 条（P1 为当前项目、P2、P3）；预期列表展示 3 条，P1 行展示「当前」徽标且无切换按钮，P2、P3 行可切换。",
+  "ruleIds" : "RC-M01-26"
+}, {
+  "action" : "新增",
+  "id" : 291,
+  "caseName" : "M01-TC-26 切换项目后顶栏与页面数据按新项目加载（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-27：GIVEN 在项目列表弹窗中选择另一项目 WHEN 切换成功 THEN 顶栏项目名称更新，工作台与各页面按新项目加载数据。",
+  "precondition" : "存在 2 个项目，各自下挂不同的组件数据。",
+  "dataRequirement" : "project_info P1（当前，含组件A）与 P2（含组件B、组件C）；预期切换后顶栏显示 P2，工作台卡片网格仅展示组件B、组件C。",
+  "ruleIds" : "RC-M01-27"
+}, {
+  "action" : "新增",
+  "id" : 292,
+  "caseName" : "M01-TC-27 新增项目名称重复时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-30：GIVEN 在弹窗中新增项目且名称与既有项目重复 WHEN 提交保存 THEN 拒绝保存并提示（唯一性范围依据 Q-M01-02 结论）。",
+  "precondition" : "已存在项目 P1，名称为「存款核心」。",
+  "dataRequirement" : "project_info P1：name='存款核心'；新增输入 name='存款核心'；预期提示名称重复，project_info 记录数不增加。",
+  "ruleIds" : "RC-M01-30"
+}, {
+  "action" : "新增",
+  "id" : 293,
+  "caseName" : "M01-TC-28 项目名称为空时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-30：GIVEN 在弹窗中新增或编辑项目且名称置空 WHEN 提交保存 THEN 拒绝保存并提示。",
+  "precondition" : "项目列表弹窗已打开。",
+  "dataRequirement" : "新增或编辑态输入框内容为空或仅含空白字符；预期拒绝保存并提示，列表与 project_info 无变化。",
+  "ruleIds" : "RC-M01-30"
+}, {
+  "action" : "新增",
+  "id" : 294,
+  "caseName" : "M01-TC-29 编辑项目名称保存后列表与顶栏同步更新（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-29：GIVEN 在弹窗中对当前项目进入编辑态并修改名称 WHEN 保存 THEN 列表与顶栏同步更新为新名称。",
+  "precondition" : "当前项目为 P1，名称为「存款核心」。",
+  "dataRequirement" : "将 P1 名称改为「存款核心系统」并保存；预期 project_info 更新，列表该行与顶栏均显示新名称。",
+  "ruleIds" : "RC-M01-29"
+}, {
+  "action" : "新增",
+  "id" : 295,
+  "caseName" : "M01-TC-30 项目列表空态提示（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-32：GIVEN 平台内不存在任何项目 WHEN 打开项目列表弹窗 THEN 提示「暂无项目，点击下方「新增项目」添加」。",
+  "precondition" : "project_info 表无记录。",
+  "dataRequirement" : "清空 project_info；预期弹窗展示空态文案，且「新增项目」主操作可用。",
+  "ruleIds" : "RC-M01-32"
+}, {
+  "action" : "新增",
+  "id" : 296,
+  "caseName" : "M01-TC-31 顶栏说明入口进入实施说明页并隐藏二级导航（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-33：GIVEN 处于任一非说明页 WHEN 点击顶栏「?」THEN 进入实施说明页且隐藏二级导航。",
+  "precondition" : "已登录平台，处于工作台或环境管理。",
+  "dataRequirement" : "无需业务数据；预期主区域展示实施说明页，侧边栏二级导航不可见。",
+  "ruleIds" : "RC-M01-33"
+}, {
+  "action" : "新增",
+  "id" : 297,
+  "caseName" : "M01-TC-32 平台功能定位阶段表内容与 AI 职责分类（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-34：GIVEN 停留在「平台功能定位」页签 WHEN 查看 THEN 以表格展示九个实施阶段的工作项、核心问题、参考资产、输出内容与 AI 职责，AI 职责取自主/主导/辅助/暂不涉及四类。",
+  "precondition" : "已进入实施说明页；阶段表内容来源依据 Q-M01-14 结论。",
+  "dataRequirement" : "预期九个阶段（架构设计、应用设计、软需分析、技术设计、代码开发、测试验证、知识沉淀、交付归档、运维与维护）齐全，每阶段五列均有内容，AI 职责取值均在四类之内。",
+  "ruleIds" : "RC-M01-34"
+}, {
+  "action" : "新增",
+  "id" : 298,
+  "caseName" : "M01-TC-33 阶段表输出内容跳转对应功能页面（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-35：GIVEN 阶段表已渲染 WHEN 点击「输出内容」列中的输出项 THEN 跳转到该输出对应的功能页面（映射依据 Q-M01-15 结论）。",
+  "precondition" : "已进入实施说明页「平台功能定位」页签。",
+  "dataRequirement" : "输出项与功能页面的映射按 Q-M01-15 结论构造；预期点击后进入目标功能页面。",
+  "ruleIds" : "RC-M01-35"
+}, {
+  "action" : "新增",
+  "id" : 299,
+  "caseName" : "M01-TC-34 平台功能说明页签渲染与提纲定位（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-36：GIVEN 平台功能说明文档存在且可读取 WHEN 切换到「平台功能说明」页签并点击提纲章节 THEN 以左提纲右正文渲染 Markdown，点击提纲定位对应章节且当前章节高亮。",
+  "precondition" : "平台文档接口可用且返回说明 Markdown（接口契约依据 Q-M01-16 结论）。",
+  "dataRequirement" : "说明文档含至少 3 个章节；预期正文渲染完整，提纲与正文章节一一对应，点击提纲后滚动定位且当前章节高亮。",
+  "ruleIds" : "RC-M01-36"
+}, {
+  "action" : "新增",
+  "id" : 300,
+  "caseName" : "M01-TC-35 平台功能说明文档缺失时提示暂无文档（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-37：GIVEN 平台功能说明文档缺失 WHEN 打开「平台功能说明」页签 THEN 提示「暂无平台功能说明文档」，不报错。",
+  "precondition" : "构造平台文档接口返回空文档或文档不存在。",
+  "dataRequirement" : "平台文档接口返回空内容；预期展示暂无文档提示，页面无错误提示与异常日志。",
+  "ruleIds" : "RC-M01-37"
+}, {
+  "action" : "新增",
+  "id" : 301,
+  "caseName" : "M01-TC-36 平台功能说明文档读取失败时展示失败原因（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-38：GIVEN 平台功能说明文档读取失败 WHEN 打开「平台功能说明」页签 THEN 展示失败原因，不白屏。",
+  "precondition" : "构造平台文档接口返回错误。",
+  "dataRequirement" : "平台文档接口返回异常；预期展示失败原因，页面结构保留，无白屏。",
+  "ruleIds" : "RC-M01-38"
+}, {
+  "action" : "新增",
+  "id" : 302,
+  "caseName" : "M01-TC-37 角色下拉选项枚举（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-40：GIVEN 顶栏角色下拉可用 WHEN 展开 WHEN 查看选项 THEN 含项目架构师、业务分析人员、评审人员、审计人员四项。",
+  "precondition" : "已登录平台，顶栏可见。",
+  "dataRequirement" : "无需业务数据；预期下拉选项为四类角色，无多余或缺失项。",
+  "ruleIds" : "RC-M01-40"
+}, {
+  "action" : "新增",
+  "id" : 303,
+  "caseName" : "M01-TC-38 角色切换不改变功能可见性与操作权限（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-10 与 RC-M01-41：GIVEN 顶栏角色下拉可用 WHEN 切换角色 THEN 顶栏显示新角色，功能可见性与操作权限完全不变。",
+  "precondition" : "已登录平台并记录切换前的功能页面清单与可操作项。",
+  "dataRequirement" : "分别在项目架构师与审计人员两个角色下逐项比对；预期顶栏角色名称更新，菜单可见性与操作按钮可点击状态完全一致。",
+  "ruleIds" : "RC-M01-10,RC-M01-41"
+}, {
+  "action" : "新增",
+  "id" : 304,
+  "caseName" : "M01-TC-39 页面头部四段结构与面包屑形态（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-13 与 RC-M01-42：GIVEN 打开任一功能页面 WHEN 查看页面头部 THEN 依次展示面包屑、页面标题、一句功能说明与右侧主操作按钮组；组件上下文面包屑为「{组件名称} / {资产分组}」，环境管理为「环境管理 / {导航分组}」。",
+  "precondition" : "分别处于组件上下文页面与环境管理页面。",
+  "dataRequirement" : "组件A 名称为「存款组件」；预期组件上下文面包屑为「存款组件 / 需求文档」形态，环境管理面包屑为「环境管理 / 项目配置」形态。",
+  "ruleIds" : "RC-M01-13,RC-M01-42"
+}, {
+  "action" : "新增",
+  "id" : 305,
+  "caseName" : "M01-TC-40 二级导航数量角标展示（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-15：GIVEN 某二级导航菜单存在数量口径 WHEN 查看该菜单 THEN 展示数量角标，数值与对应模块口径一致。",
+  "precondition" : "构造某菜单对应资产数量大于 0（具体取数规则依据 Q-M01-09 结论）。",
+  "dataRequirement" : "以模板管理的 Spec模板为例，构造 spec_template 记录若干条；预期菜单展示数量角标且数值与来源模块统计值一致。",
+  "ruleIds" : "RC-M01-15"
+}, {
+  "action" : "新增",
+  "id" : 306,
+  "caseName" : "M01-TC-41 列表类页面表格行悬停高亮（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-43：GIVEN 打开任一含表格的列表类页面 WHEN 鼠标悬停表格行 THEN 该行高亮。",
+  "precondition" : "列表页面存在至少 1 条数据。",
+  "dataRequirement" : "任取一列表页构造多条记录；预期悬停行呈现高亮样式，移出后恢复。",
+  "ruleIds" : "RC-M01-43"
+}, {
+  "action" : "新增",
+  "id" : 307,
+  "caseName" : "M01-TC-42 流程详情页头部面包屑且无整页返回按钮（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-44：GIVEN 进入任一流程详情页 WHEN 查看头部 THEN 以面包屑展示所处流程位置，且不提供整页返回按钮。",
+  "precondition" : "存在可进入的流程详情页。",
+  "dataRequirement" : "无需特定业务数据；预期头部展示流程位置面包屑，页面内不存在整页返回按钮。",
+  "ruleIds" : "RC-M01-44"
+}, {
+  "action" : "新增",
+  "id" : 308,
+  "caseName" : "M01-TC-43 同一时刻仅展示一个功能页面（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-11：GIVEN 已进入任一功能页面 WHEN 切换到另一功能页面 THEN 主区域仅呈现目标页面，原页面内容不再展示。",
+  "precondition" : "已进入环境管理并打开项目信息页。",
+  "dataRequirement" : "project_info 至少 1 条；切换到应用组件页；预期主区域仅渲染应用组件页，项目信息页内容不可见。",
+  "ruleIds" : "RC-M01-11"
+}, {
+  "action" : "新增",
+  "id" : 309,
+  "caseName" : "M01-TC-44 文档类页面正文渲染与提纲定位（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-14：GIVEN 打开以 Markdown 承载的文档类页面 WHEN 查看 THEN 正文统一渲染并展示右侧固定提纲，点击提纲定位章节且当前项高亮。",
+  "precondition" : "存在内容完整的文档类页面（如组件需求文档详情）。",
+  "dataRequirement" : "文档含至少 3 个章节；预期右侧提纲与正文章节同源，点击提纲后滚动定位到对应章节且该提纲项高亮。",
+  "ruleIds" : "RC-M01-14"
+}, {
+  "action" : "新增",
+  "id" : 310,
+  "caseName" : "M01-TC-45 环境管理二级导航项切换页面并高亮（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-23：GIVEN 处于环境管理 WHEN 点击某二级导航项 THEN 主区域切换到对应页面且该项高亮。",
+  "precondition" : "已进入环境管理，当前处于项目信息页。",
+  "dataRequirement" : "点击「技术框架」导航项；预期主区域展示技术框架页，且「技术框架」项高亮、原高亮项取消高亮。",
+  "ruleIds" : "RC-M01-23"
+}, {
+  "action" : "新增",
+  "id" : 311,
+  "caseName" : "M01-TC-46 新增项目名称合法且不重复时创建成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-28：GIVEN 在项目列表弹窗中新增项目 WHEN 名称合法且不重复 THEN 项目创建成功并出现在列表中。",
+  "precondition" : "项目列表弹窗已打开，平台内无同名项目（合法性规则依据 Q-M01-03 结论）。",
+  "dataRequirement" : "新增输入 name='存款核心系统'；预期提示创建成功，列表新增该行，project_info 新增 1 条记录。",
+  "ruleIds" : "RC-M01-28"
+}, {
+  "action" : "新增",
+  "id" : 312,
+  "caseName" : "M01-TC-47 顶栏元素完整性（正向）",
+  "direction" : "正向",
+  "description" : "RC-M01-45：GIVEN 打开任一非说明页 WHEN 查看顶栏 THEN 含平台标识、平台名称、当前项目名称（可点击）、一级导航按钮、平台说明按钮「?」与角色下拉。",
+  "precondition" : "已登录平台，处于非说明页。",
+  "dataRequirement" : "无需特定业务数据；预期六个元素齐全，当前一级导航项高亮，说明页不展示顶栏。",
+  "ruleIds" : "RC-M01-45"
+}, {
+  "action" : "新增",
+  "id" : 313,
+  "caseName" : "M01-TC-48 工作台页面头部与无组件空态（反向）",
+  "direction" : "反向",
+  "description" : "RC-M01-46：GIVEN 当前项目下无任何组件 WHEN 进入工作台 THEN 面包屑为「当前项目名称 / 工作台」，标题为「应用组件」，说明为「当前项目组件基线及默认工程概览」，主操作为「管理组件」，卡片区为空。",
+  "precondition" : "当前项目下无 component_definition 记录。",
+  "dataRequirement" : "project_info 1 条作为当前项目且其下无组件；预期页面头部四段文案符合要求，卡片区为空且不报错。",
+  "ruleIds" : "RC-M01-46"
+} ]

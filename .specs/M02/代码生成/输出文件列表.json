@@ -1,0 +1,29 @@
+{
+"代码列表":{
+  "后端代码": [
+    "src/main/java/com/musemvp/coreagent/api/ProjectController.java",
+    "src/main/java/com/musemvp/coreagent/api/dto/ProjectDetailVO.java",
+    "src/main/java/com/musemvp/coreagent/domain/AgentDefinition.java",
+    "src/main/java/com/musemvp/coreagent/repository/AgentDefinitionRepository.java",
+    "src/main/java/com/musemvp/coreagent/repository/ProjectInfoRepository.java",
+    "src/main/java/com/musemvp/coreagent/service/ProjectService.java",
+    "src/main/java/com/musemvp/coreagent/service/ProjectStageService.java",
+    "src/main/java/com/musemvp/coreagent/service/AgentCategorySyncService.java",
+    "src/main/java/com/musemvp/coreagent/service/ContextService.java",
+    "src/main/java/com/musemvp/coreagent/support/StageCatalog.java",
+    "src/main/java/com/musemvp/coreagent/support/ErrorCode.java"],
+"前端代码":[
+    "src/main/resources/static/js/pages/ProjectInfo.js",
+    "src/main/resources/static/js/core/store.js",
+    "src/main/resources/static/js/layout/AppHeader.js",
+    "src/main/resources/static/js/main.js",
+    "src/main/resources/static/css/app.css"
+  ]
+},
+  "测试报告": [
+    ".specs/M02/代码生成/测试报告.md"
+  ],
+ "问题清单": [
+    ".specs/M02/代码生成/问题清单.json"
+  ]
+}

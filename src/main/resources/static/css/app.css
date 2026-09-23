@@ -1,0 +1,544 @@
+/*
+ * 基础样式（黑金主题），见 ft-FT-002 §4.4。
+ *
+ * 全部颜色、字体、间距、圆角、描边、阴影与动效一律以 var(--ca-*) 引用令牌，禁止硬编码色值
+ * （BR-M01-16 / ft-FT-002-B1，由 ThemeHardcodeScanTest 门禁）。
+ * 令牌基线见 css/tokens.css（首帧生效），运行期覆盖见 theme.js 注入的 <style id="ca-theme-runtime">。
+ */
+
+:root {
+  color: var(--ca-color-text-primary);
+  background: var(--ca-color-bg-primary);
+  font-family: var(--ca-font-family-base);
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ca-color-bg-primary);
+  color: var(--ca-color-text-primary);
+}
+
+button,
+code,
+pre {
+  font: inherit;
+}
+
+/* ------------------------------------------------------------------ 顶栏 */
+
+.app-header {
+  min-height: 76px;
+  padding: var(--ca-space-3) var(--ca-space-8);
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-3);
+  color: var(--ca-color-text-primary);
+  background: var(--ca-color-bg-secondary);
+  border-bottom: var(--ca-border-width-hairline) solid var(--ca-color-border-gold-subtle);
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: var(--ca-border-width-control) solid var(--ca-color-border-gold);
+  border-radius: var(--ca-radius-md);
+  color: var(--ca-color-accent-gold);
+  background: var(--ca-color-bg-elevated);
+  font-weight: var(--ca-font-weight-bold);
+}
+
+.app-kicker {
+  margin: 0 0 2px;
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-xs);
+  font-weight: var(--ca-font-weight-bold);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: var(--ca-font-size-lg);
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+/*
+ * 状态徽标：语义状态色沿用既有色相，仅做深色基底下的明度适配（BR-M01-18）。
+ * 四态均保留文字标签（「加载中／在线／告警／离线」），语义不单独依赖颜色。
+ */
+.status-badge {
+  min-width: 76px;
+  margin-left: auto;
+  padding: 6px 10px;
+  border: var(--ca-border-width-control) solid transparent;
+  border-radius: var(--ca-radius-pill);
+  text-align: center;
+  font-size: var(--ca-font-size-sm);
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+.status-badge.is-loading {
+  color: var(--ca-color-text-secondary);
+  background: var(--ca-color-bg-hover);
+  border-color: var(--ca-color-border-neutral);
+}
+
+.status-badge.is-online {
+  color: var(--ca-color-success);
+  background: var(--ca-color-success-soft);
+  border-color: var(--ca-color-success);
+}
+
+.status-badge.is-warning {
+  color: var(--ca-color-warning);
+  background: var(--ca-color-warning-soft);
+  border-color: var(--ca-color-warning);
+}
+
+.status-badge.is-offline {
+  color: var(--ca-color-danger);
+  background: var(--ca-color-danger-soft);
+  border-color: var(--ca-color-danger);
+}
+
+/* -------------------------------------------------------------- 运行状态页 */
+
+.workspace {
+  width: min(1040px, calc(100% - 32px));
+  margin: var(--ca-space-7) auto;
+  display: grid;
+  gap: var(--ca-space-6);
+}
+
+.status-summary {
+  padding: var(--ca-space-6) 0 var(--ca-space-5);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--ca-space-6);
+  border-bottom: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+}
+
+.section-label {
+  margin: 0 0 var(--ca-space-2);
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+  font-weight: var(--ca-font-weight-bold);
+}
+
+.status-summary h2,
+.section-heading h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.status-summary h2 {
+  font-size: var(--ca-font-size-2xl);
+  line-height: var(--ca-font-line-height-tight);
+}
+
+.summary-message {
+  margin: 10px 0 0;
+  color: var(--ca-color-text-secondary);
+}
+
+/* 主操作：金色渐变 + 深色文字（UI-FT-002-07）。background-color 单独给出，
+   打印令牌包把渐变置为 none 后仍有可读底色，不会退化为白底白字。 */
+.refresh-button {
+  min-width: 104px;
+  min-height: 40px;
+  padding: 9px var(--ca-space-4);
+  border: var(--ca-border-width-control) solid transparent;
+  border-radius: var(--ca-radius-md);
+  color: var(--ca-color-text-on-accent);
+  background-color: var(--ca-color-accent-gold);
+  background-image: var(--ca-gradient-gold);
+  cursor: pointer;
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+.refresh-button:hover:not(:disabled) {
+  background-image: none;
+  background-color: var(--ca-color-accent-gold-hover);
+}
+
+/* 禁用态：以令牌取值降级表达，不使用整体 opacity（BR-M01-17、§4.4.2）。
+   文字取 color-text-disabled 对 color-bg-hover 为 4.58:1，满足 AA。 */
+.refresh-button:disabled {
+  cursor: wait;
+  background-image: none;
+  background-color: var(--ca-color-bg-hover);
+  border-color: var(--ca-color-accent-gold-dim);
+  color: var(--ca-color-text-disabled);
+}
+
+.detail-section,
+.response-section {
+  padding: var(--ca-space-5);
+  background: var(--ca-color-bg-elevated);
+  border: var(--ca-border-gold-hairline);
+  border-radius: var(--ca-radius-card);
+  box-shadow: var(--ca-shadow-card);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+  margin-bottom: var(--ca-space-4);
+}
+
+.section-heading h2 {
+  font-size: var(--ca-font-size-base);
+}
+
+.section-heading code,
+.section-heading span {
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+}
+
+.status-grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+  border-left: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+}
+
+.status-grid > div {
+  min-width: 0;
+  padding: var(--ca-space-4);
+  border-right: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+  border-bottom: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+}
+
+.status-grid dt {
+  margin-bottom: var(--ca-space-2);
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+}
+
+.status-grid dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+pre {
+  min-height: 180px;
+  margin: 0;
+  padding: var(--ca-space-4);
+  overflow: auto;
+  border-radius: var(--ca-radius-md);
+  color: var(--ca-color-text-primary);
+  background: var(--ca-color-bg-sunken);
+  font-family: var(--ca-font-family-mono);
+  font-size: var(--ca-font-size-sm);
+  line-height: var(--ca-font-line-height-base);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ---------------------------------------------------------------- 项目信息页（M02） */
+
+/* 页面头部四段：面包屑独立成行置于标题之上（D-M02-05/C-01、M01 RC-M01-42 的环境管理形态）。 */
+.page-header {
+  flex-wrap: wrap;
+}
+
+.breadcrumb {
+  flex: 1 1 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+}
+
+.breadcrumb-item.is-current {
+  color: var(--ca-color-text-primary);
+}
+
+.breadcrumb-sep {
+  color: var(--ca-color-text-disabled);
+}
+
+.page-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-4);
+}
+
+/* 提示条：需求规定的定值文案（D-M02-05/C-02），仅说明不承载交互。 */
+.hint-bar {
+  margin: 0;
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border: var(--ca-border-gold-hairline);
+  border-radius: var(--ca-radius-md);
+  color: var(--ca-color-text-secondary);
+  background: var(--ca-color-accent-gold-soft);
+  font-size: var(--ca-font-size-sm);
+  line-height: var(--ca-font-line-height-base);
+}
+
+.project-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-4);
+  padding: var(--ca-space-5);
+  background: var(--ca-color-bg-elevated);
+  border: var(--ca-border-gold-hairline);
+  border-radius: var(--ca-radius-card);
+  box-shadow: var(--ca-shadow-card);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-2);
+}
+
+.form-label {
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+}
+
+/* 多行文本沿用 .text-input 的控件外观，仅放宽高度与换行行为。 */
+.textarea-input {
+  min-height: 76px;
+  resize: vertical;
+  font-family: var(--ca-font-family-base);
+  line-height: var(--ca-font-line-height-base);
+}
+
+.stage-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-3);
+}
+
+.section-title {
+  margin: 0;
+  color: var(--ca-color-text-primary);
+  font-size: var(--ca-font-size-base);
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+/* 列表类表格的全局约定：行悬停高亮（M01 RC-M01-43 的样式约定，本项目信息页为首个承载页面）。 */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+  border-radius: var(--ca-radius-md);
+  font-size: var(--ca-font-size-base);
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border-bottom: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.data-table th {
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+  font-weight: var(--ca-font-weight-medium);
+  background: var(--ca-color-bg-secondary);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background: var(--ca-color-bg-hover);
+}
+
+.stage-table .col-index,
+.stage-table .stage-index {
+  width: 88px;
+}
+
+.stage-table .col-action,
+.stage-table .stage-action {
+  width: 132px;
+}
+
+/* 序号徽标：两位补零（RC-M02-30），等宽数字保证多行对齐。 */
+.stage-index {
+  color: var(--ca-color-accent-gold);
+  font-family: var(--ca-font-family-mono);
+  font-variant-numeric: var(--ca-font-numeric-feature);
+}
+
+.stage-name-input {
+  width: 100%;
+}
+
+/* 锁定阶段行：只读加粗文本，无输入框与删除入口（RC-M02-08）。 */
+.stage-name-locked {
+  color: var(--ca-color-text-primary);
+  font-weight: var(--ca-font-weight-bold);
+}
+
+
+/* ---------------------------------------------------------------- M04 应用类型页 */
+
+/* 危险操作按钮（RC-M04-33：删除类型必须为危险样式）。只新增类，不修改既有按钮类。 */
+.button-danger {
+  border-color: var(--ca-color-danger);
+  color: var(--ca-color-danger);
+  background: transparent;
+}
+
+.button-danger:hover:not(:disabled) {
+  background: var(--ca-color-danger-soft);
+}
+
+/* 主从两栏：左侧类型列表 + 右侧取值明细（D-M04-08/C-03、C-05）。 */
+.master-detail {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: var(--ca-space-5);
+  align-items: start;
+}
+
+.master-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-2);
+}
+
+.master-list {
+  display: flex;
+  flex-direction: column;
+  border: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+  border-radius: var(--ca-radius-md);
+  overflow: hidden;
+}
+
+/* 类型项：类型名 + 取值数量；顺序直接使用服务端返回顺序，前端不排序（D-M04-07/C-01）。 */
+.master-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-2);
+  width: 100%;
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border: none;
+  border-bottom: var(--ca-border-width-hairline) solid var(--ca-color-border-neutral);
+  color: var(--ca-color-text-primary);
+  background: transparent;
+  font-size: var(--ca-font-size-base);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--ca-motion-duration-fast) var(--ca-motion-ease-standard);
+}
+
+.master-list-item:last-child {
+  border-bottom: none;
+}
+
+.master-list-item:hover {
+  background: var(--ca-color-bg-hover);
+}
+
+/* 选中态：单选高亮，仅本地切换，不触发新的读取请求（D-M04-08/C-06）。 */
+.master-list-item.is-active {
+  color: var(--ca-color-accent-gold);
+  background: var(--ca-color-accent-gold-soft);
+  box-shadow: inset var(--ca-border-width-indicator) 0 0 0 var(--ca-color-accent-gold);
+}
+
+.master-list-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.master-list-count {
+  flex: 0 0 auto;
+  color: var(--ca-color-text-secondary);
+  font-family: var(--ca-font-family-mono);
+  font-variant-numeric: var(--ca-font-numeric-feature);
+  font-size: var(--ca-font-size-sm);
+}
+
+.master-list-item.is-active .master-list-count {
+  color: var(--ca-color-accent-gold);
+}
+
+/* 页脚统计：{typeCount}个类型 · {valueCount}条取值（D-M04-07/C-08）。 */
+.master-footer {
+  margin: 0;
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+}
+
+/* 右侧详情：标题行（类型名 + 删除类型入口）与表格区工具条。 */
+.master-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-3);
+  min-width: 0;
+}
+
+.detail-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-3);
+}
+
+.detail-title {
+  margin: 0;
+  color: var(--ca-color-text-primary);
+  font-size: var(--ca-font-size-lg);
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+}
+
+/* 行内编辑与行内新增：一行内并排的输入框与操作按钮。 */
+.value-table .row-input {
+  width: 100%;
+}
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+}
+
+.value-table .col-action {
+  width: 190px;
+}
+
+/* 新增界面的字段区（复用既有 .modal-* 结构，仅补字段间距）。 */
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-1);
+  margin-bottom: var(--ca-space-3);
+}
+
+.modal-field .form-label {
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-sm);
+}

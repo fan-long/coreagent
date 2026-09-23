@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark-gold">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Core-Agent 工程平台</title>
+  <!--
+    样式表加载顺序（ft-FT-002 §4.1）：tokens.css 必须最先且同步加载（无 media 条件、无 defer），
+    保证首帧即黑金，杜绝先浅后深的闪烁；print.css 最后加载，其 @media print 令牌覆盖按需生效。
+  -->
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/app.css">
+  <link rel="stylesheet" href="./css/layout.css">
+  <link rel="stylesheet" href="./css/print.css">
+</head>
+<body>
+  <!--
+    应用骨架：顶栏容器 + 侧边栏容器 + 主区域容器（UI-M01-01 ~ UI-M01-06）。
+    主区域同时仅展示一个功能页面，由 router.js 卸载-挂载替换（BR-M01-11）。
+  -->
+  <div class="app-shell">
+    <header id="app-header" class="app-header"></header>
+    <div class="app-body">
+      <aside id="side-nav" class="side-nav" hidden></aside>
+      <main id="main-view" class="main-view" aria-live="polite"></main>
+    </div>
+  </div>
+  <div id="dialog-root"></div>
+  <noscript>本平台需要启用 JavaScript 才能使用。</noscript>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

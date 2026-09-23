@@ -1,0 +1,102 @@
+/*
+ * 浅色基线令牌包（与 resources/theme/light.json 同值），见详细设计 §3.5。
+ *
+ * 用途：观察期（至 2026-10-02）内的运维级回退。**默认不被 index.html 引用**——主路径的回退是
+ * 修改 platform.theme.active=light 后重启，前端刷新即可；本文件仅在「运维手动切换静态资源引用」
+ * 这一极端场景下使用（非主路径）。
+ *
+ * 与 tokens.css 同属硬编码扫描白名单。
+ */
+
+:root {
+  /* ---------------------------------------------------------------- 色板 */
+  --ca-color-bg-primary: #F3F5F7;
+  --ca-color-bg-secondary: #FFFFFF;
+  --ca-color-bg-elevated: #FFFFFF;
+  --ca-color-bg-hover: #EEF2F7;
+  --ca-color-bg-sunken: #202A3A;
+  --ca-color-overlay: rgba(23, 32, 51, 0.42);
+  --ca-color-border-neutral: #E2E7EE;
+  --ca-color-border-control: #D5DBE4;
+  --ca-color-border-gold-subtle: rgba(41, 163, 106, 0.28);
+  --ca-color-border-gold: #29A36A;
+  --ca-color-text-primary: #172033;
+  --ca-color-text-secondary: #6B7789;
+  --ca-color-text-disabled: #8A94A4;
+  --ca-color-text-on-accent: #FFFFFF;
+  --ca-color-accent-gold: #29A36A;
+  --ca-color-accent-gold-hover: #238C5B;
+  --ca-color-accent-gold-dim: #7DCAA1;
+  --ca-color-accent-gold-soft: rgba(41, 163, 106, 0.18);
+  --ca-gradient-gold: linear-gradient(135deg, #238C5B 0%, #29A36A 55%, #1C7A4F 100%);
+  --ca-color-success: #1C7A4F;
+  --ca-color-success-soft: #E6F5EE;
+  --ca-color-warning: #B7791F;
+  --ca-color-warning-soft: #F8E8B7;
+  --ca-color-danger: #A13B3B;
+  --ca-color-danger-soft: #FDF6F6;
+  --ca-color-info: #4B6B8A;
+  --ca-color-chart-1: #29A36A;
+  --ca-color-chart-2: #4C8DFF;
+  --ca-color-chart-3: #3FBF7F;
+  --ca-color-chart-4: #E0A93B;
+  --ca-color-chart-5: #B07CE8;
+  --ca-color-chart-6: #56C7D8;
+
+  /* ---------------------------------------------------------------- 字体 */
+  --ca-font-family-base: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --ca-font-family-mono: "Cascadia Code", Consolas, monospace;
+  --ca-font-size-xs: 0.72rem;
+  --ca-font-size-sm: 0.78rem;
+  --ca-font-size-base: 0.875rem;
+  --ca-font-size-lg: 1.15rem;
+  --ca-font-size-xl: 1.4rem;
+  --ca-font-size-2xl: 2rem;
+  --ca-font-weight-regular: 400;
+  --ca-font-weight-medium: 500;
+  --ca-font-weight-semibold: 650;
+  --ca-font-weight-bold: 700;
+  --ca-font-line-height-tight: 1.25;
+  --ca-font-line-height-base: 1.65;
+  --ca-font-numeric-feature: "tnum" 1, "lnum" 1;
+
+  /* ---------------------------------------------------------------- 间距 */
+  --ca-space-1: 4px;
+  --ca-space-2: 8px;
+  --ca-space-3: 12px;
+  --ca-space-4: 16px;
+  --ca-space-5: 20px;
+  --ca-space-6: 24px;
+  --ca-space-7: 32px;
+  --ca-space-8: 48px;
+
+  /* ---------------------------------------------------------------- 圆角 */
+  --ca-radius-sm: 4px;
+  --ca-radius-md: 6px;
+  --ca-radius-lg: 8px;
+  --ca-radius-card: 10px;
+  --ca-radius-pill: 999px;
+
+  /* ---------------------------------------------------------------- 描边 */
+  --ca-border-width-hairline: 1px;
+  --ca-border-width-control: 1px;
+  --ca-border-width-indicator: 3px;
+  --ca-border-gold-hairline: 1px solid var(--ca-color-border-gold-subtle);
+
+  /* ---------------------------------------------------------------- 阴影 */
+  --ca-shadow-card: 0 1px 2px rgba(23, 32, 51, 0.06);
+  --ca-shadow-raised: 0 6px 18px rgba(23, 32, 51, 0.12);
+  --ca-shadow-overlay: 0 18px 48px rgba(23, 32, 51, 0.28);
+  --ca-shadow-glow-gold: 0 0 0 2px rgba(41, 163, 106, 0.18);
+  --ca-shadow-none: none;
+
+  /* ---------------------------------------------------------------- 动效 */
+  --ca-motion-duration-instant: 0ms;
+  --ca-motion-duration-fast: 120ms;
+  --ca-motion-duration-base: 200ms;
+  --ca-motion-duration-slow: 320ms;
+  --ca-motion-duration-skeleton: 1300ms;
+  --ca-motion-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --ca-motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ca-motion-duration-fallback: 0ms;
+}

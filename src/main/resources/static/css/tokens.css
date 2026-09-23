@@ -1,0 +1,123 @@
+/*
+ * 静态基线令牌包（黑金，与 resources/theme/dark-gold.json 同值），见详细设计 §4.1。
+ *
+ * 本文件是三级兜底链路的第①级：同步加载且在全部样式表之前，保证**首帧即黑金**、不出现先浅后深的闪烁；
+ * 接口失败时也由它着色，而不是落到浏览器默认色。
+ *
+ * 唯一允许出现颜色字面量的文件之一（连同 tokens-light.css、print.css 的令牌覆盖块），
+ * 见 ThemeHardcodeScanTest 白名单。令牌名称一经写入即固化，重命名等同于破坏性变更（§2.1）。
+ */
+
+:root {
+  /* ---------------------------------------------------------------- 色板 */
+  --ca-color-bg-primary: #0B0B0D;
+  --ca-color-bg-secondary: #14141A;
+  --ca-color-bg-elevated: #1C1C24;
+  --ca-color-bg-hover: #23232E;
+  --ca-color-bg-sunken: #07070A;
+  --ca-color-overlay: rgba(0, 0, 0, 0.72);
+  --ca-color-border-neutral: #2A2A35;
+  --ca-color-border-control: #5E5E6B;
+  --ca-color-border-gold-subtle: rgba(212, 175, 55, 0.28);
+  --ca-color-border-gold: #D4AF37;
+  --ca-color-text-primary: #F2F2F5;
+  --ca-color-text-secondary: #A8A8B3;
+  --ca-color-text-disabled: #8A8A96;
+  --ca-color-text-on-accent: #14140A;
+  --ca-color-accent-gold: #D4AF37;
+  --ca-color-accent-gold-hover: #F0C75E;
+  --ca-color-accent-gold-dim: #8A7326;
+  --ca-color-accent-gold-soft: rgba(212, 175, 55, 0.16);
+  --ca-gradient-gold: linear-gradient(135deg, #F0C75E 0%, #D4AF37 55%, #9C7C22 100%);
+  --ca-color-success: #3FBF7F;
+  --ca-color-success-soft: rgba(63, 191, 127, 0.16);
+  --ca-color-warning: #E0A93B;
+  --ca-color-warning-soft: rgba(224, 169, 59, 0.16);
+  --ca-color-danger: #E5484D;
+  --ca-color-danger-soft: rgba(229, 72, 77, 0.16);
+  --ca-color-info: #4C8DFF;
+  --ca-color-chart-1: #D4AF37;
+  --ca-color-chart-2: #4C8DFF;
+  --ca-color-chart-3: #3FBF7F;
+  --ca-color-chart-4: #E0A93B;
+  --ca-color-chart-5: #B07CE8;
+  --ca-color-chart-6: #56C7D8;
+
+  /* ---------------------------------------------------------------- 字体 */
+  --ca-font-family-base: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --ca-font-family-mono: "Cascadia Code", Consolas, monospace;
+  --ca-font-size-xs: 0.72rem;
+  --ca-font-size-sm: 0.78rem;
+  --ca-font-size-base: 0.875rem;
+  --ca-font-size-lg: 1.15rem;
+  --ca-font-size-xl: 1.4rem;
+  --ca-font-size-2xl: 2rem;
+  --ca-font-weight-regular: 400;
+  --ca-font-weight-medium: 500;
+  --ca-font-weight-semibold: 650;
+  --ca-font-weight-bold: 700;
+  --ca-font-line-height-tight: 1.25;
+  --ca-font-line-height-base: 1.65;
+  --ca-font-numeric-feature: "tnum" 1, "lnum" 1;
+
+  /* ---------------------------------------------------------------- 间距 */
+  --ca-space-1: 4px;
+  --ca-space-2: 8px;
+  --ca-space-3: 12px;
+  --ca-space-4: 16px;
+  --ca-space-5: 20px;
+  --ca-space-6: 24px;
+  --ca-space-7: 32px;
+  --ca-space-8: 48px;
+
+  /* ---------------------------------------------------------------- 圆角 */
+  --ca-radius-sm: 4px;
+  --ca-radius-md: 6px;
+  --ca-radius-lg: 8px;
+  --ca-radius-card: 10px;
+  --ca-radius-pill: 999px;
+
+  /* ---------------------------------------------------------------- 描边 */
+  --ca-border-width-hairline: 1px;
+  --ca-border-width-control: 1px;
+  --ca-border-width-indicator: 3px;
+  --ca-border-gold-hairline: 1px solid var(--ca-color-border-gold-subtle);
+
+  /* ---------------------------------------------------------------- 阴影 */
+  --ca-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --ca-shadow-raised: 0 6px 18px rgba(0, 0, 0, 0.55);
+  --ca-shadow-overlay: 0 18px 48px rgba(0, 0, 0, 0.65);
+  --ca-shadow-glow-gold: 0 0 0 1px rgba(212, 175, 55, 0.35), 0 0 12px rgba(212, 175, 55, 0.18);
+  --ca-shadow-none: none;
+
+  /* ---------------------------------------------------------------- 动效 */
+  --ca-motion-duration-instant: 0ms;
+  --ca-motion-duration-fast: 120ms;
+  --ca-motion-duration-base: 200ms;
+  --ca-motion-duration-slow: 320ms;
+  --ca-motion-duration-skeleton: 1300ms;
+  --ca-motion-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --ca-motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ca-motion-duration-fallback: 0ms;
+}
+
+/*
+ * 弱动效退化（§4.7）：全部过渡均引用 motion-duration-* 令牌，故一次覆盖即全站退化为无动画。
+ * 辉光（--ca-shadow-glow-gold）是静态阴影而非动画，此处不覆盖，选中/聚焦的可辨识性不受影响。
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ca-motion-duration-instant: 0ms;
+    --ca-motion-duration-fast: 0ms;
+    --ca-motion-duration-base: 0ms;
+    --ca-motion-duration-slow: 0ms;
+    --ca-motion-duration-skeleton: 0ms;
+  }
+
+  /* 骨架微光关闭后转为静态占位；「正在加载…」文案由 notice.js 的 renderLoading 保留，
+     以 aria-live 区域维持可感知性（PQ-FT002-08 的落地方式）。 */
+  .skeleton-card {
+    animation: none;
+    background: var(--ca-color-bg-secondary);
+  }
+}

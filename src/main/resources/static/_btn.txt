@@ -1,0 +1,120 @@
+a-space-1);
+  min-width: 0;
+}
+
+.page-title {
+  margin: 0;
+  color: var(--ca-color-text-primary);
+  font-size: var(--ca-font-size-xl);
+  font-weight: var(--ca-font-weight-semibold);
+}
+
+.page-subtitle {
+  margin: 0;
+  color: var(--ca-color-text-secondary);
+  font-size: var(--ca-font-size-base);
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  flex: 0 0 auto;
+}
+
+.button {
+  padding: var(--ca-space-2) var(--ca-space-4);
+  border: var(--ca-border-width-control) solid transparent;
+  border-radius: var(--ca-radius-md);
+  font-size: var(--ca-font-size-base);
+  cursor: pointer;
+  transition: background-color var(--ca-motion-duration-fast) var(--ca-motion-ease-standard),
+    border-color var(--ca-motion-duration-fast) var(--ca-motion-ease-standard),
+    color var(--ca-motion-duration-fast) var(--ca-motion-ease-standard);
+}
+
+/* 禁用态令牌降级：删除整体 opacity，文字对背景 4.58:1 满足 AA（BR-M01-17、§4.4.2）。
+   选择器特异性高于 .button-primary / .button-secondary，故对三类按钮同时生效。 */
+.button:disabled {
+  cursor: not-allowed;
+  background-image: none;
+  background-color: var(--ca-color-bg-hover);
+  border-color: var(--ca-color-border-neutral);
+  color: var(--ca-color-text-disabled);
+}
+
+/* 主按钮：金色渐变 + 深色文字。background-color 单独给出，
+   打印令牌包把渐变置为 none 后仍有可读底色（§4.6）。 */
+.button-primary {
+  color: var(--ca-color-text-on-accent);
+  background-color: var(--ca-color-accent-gold);
+  background-image: var(--ca-gradient-gold);
+}
+
+.button-primary:hover:not(:disabled) {
+  background-image: none;
+  background-color: var(--ca-color-accent-gold-hover);
+}
+
+/* 次按钮：金色描边幽灵按钮 */
+.button-secondary {
+  border-color: var(--ca-color-border-gold);
+  color: var(--ca-color-accent-gold);
+  background: transparent;
+}
+
+.button-secondary:hover:not(:disabled) {
+  background: var(--ca-color-accent-gold-soft);
+}
+
+/* 幽灵按钮：取消 / 切换一类的低频操作 */
+.button-ghost {
+  color: var(--ca-color-accent-gold);
+  background: transparent;
+}
+
+.button-ghost:hover:not(:disabled) {
+  background: var(--ca-color-accent-gold-soft);
+}
+
+/* 输入框：下沉面 + 控件描边，聚焦转金色描边 + 辉光（UI-FT-002-06） */
+.text-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 7px 10px;
+  border: var(--ca-border-width-control) solid var(--ca-color-border-control);
+  border-radius: var(--ca-radius-md);
+  color: var(--ca-color-text-primary);
+  background: var(--ca-color-bg-sunken);
+  font-size: var(--ca-font-size-base);
+}
+
+.text-input:focus {
+  border-color: var(--ca-color-border-gold);
+  outline: none;
+  box-shadow: var(--ca-shadow-glow-gold);
+}
+
+/* ---------------------------------------------------------------- 组件卡片 */
+
+.card-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-3);
+}
+
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--ca-space-4);
+}
+
+.component-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--ca-space-4);
+  border: var(--ca-border-gold-hairline);
+  border-radius: var(--ca-radius-card);
+  background: var(--ca-color-bg-elevated);
+  bo

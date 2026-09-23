@@ -1,0 +1,379 @@
+[ {
+  "action" : "新增",
+  "id" : 359,
+  "caseName" : "M07-TC-01 模型ID为空或仅空白时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-01：GIVEN 新增模型配置 WHEN 模型ID 为空串或仅含空白字符并提交保存 THEN 拒绝保存并提示「模型ID不能为空」。",
+  "precondition" : "已进入环境管理 / 系统配置 / 模型配置页，处于新增态。",
+  "dataRequirement" : "分别构造模型ID 为空串、仅含半角空格（如三个空格）、仅含全角空格三种输入；预期均被拒绝并提示「模型ID不能为空」，model_config 记录数不变。",
+  "ruleIds" : "RC-M07-01"
+}, {
+  "action" : "新增",
+  "id" : 360,
+  "caseName" : "M07-TC-02 模型ID前后空白裁剪后保存（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-01：GIVEN 模型ID 前后含空白字符 WHEN 提交保存 THEN 按裁剪后文本存储，且列表展示裁剪后文本。",
+  "precondition" : "已进入模型配置页的新增态。",
+  "dataRequirement" : "模型ID 输入「  deepseek-pro  」；预期 model_config.model_id 存储为「deepseek-pro」，左侧列表展示裁剪后文本。",
+  "ruleIds" : "RC-M07-01"
+}, {
+  "action" : "新增",
+  "id" : 361,
+  "caseName" : "M07-TC-03 模型ID 32 字符边界保存成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-02：GIVEN 模型ID 长度恰为 32 个字符 WHEN 提交保存 THEN 保存成功。",
+  "precondition" : "已进入模型配置页的新增态（计数口径依据 Q-M07-05 结论）。",
+  "dataRequirement" : "构造长度为 32 个字符的模型ID；预期保存成功，model_id 完整存储 32 字符。",
+  "ruleIds" : "RC-M07-02"
+}, {
+  "action" : "新增",
+  "id" : 362,
+  "caseName" : "M07-TC-04 模型ID 33 字符拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-02：GIVEN 模型ID 长度为 33 个字符 WHEN 提交保存 THEN 拒绝保存（提示文案依据 Q-M07-05 结论）。",
+  "precondition" : "已进入模型配置页的新增态（计数口径依据 Q-M07-05 结论）。",
+  "dataRequirement" : "构造长度为 33 个字符的模型ID；预期拒绝保存并给出超限提示，model_config 记录数不变。",
+  "ruleIds" : "RC-M07-02"
+}, {
+  "action" : "新增",
+  "id" : 363,
+  "caseName" : "M07-TC-05 模型ID含前后空白且原长超限时按裁剪后判定（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-01 与 RC-M07-02：GIVEN 模型ID 含前后空白且原长度超过 32 WHEN 提交保存 THEN 按裁剪后长度判定，不因空白导致超限误报。",
+  "precondition" : "已进入模型配置页的新增态。",
+  "dataRequirement" : "构造「两个前导空格 + 32 个字符 + 两个尾随空格」的输入；预期裁剪后为 32 字符，保存成功。",
+  "ruleIds" : "RC-M07-01,RC-M07-02"
+}, {
+  "action" : "新增",
+  "id" : 364,
+  "caseName" : "M07-TC-06 模型ID重复时拒绝并提示已存在（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-03：GIVEN 已存在模型ID 为 X 的模型配置 WHEN 以相同模型ID X 提交新增 THEN 拒绝保存并提示「已存在该模型ID的配置：X」。",
+  "precondition" : "model_config 中已存在 model_id='deepseek-pro' 的记录。",
+  "dataRequirement" : "以 model_id='deepseek-pro' 提交新增；预期拒绝保存，提示含「已存在该模型ID的配置：deepseek-pro」，记录数不变。",
+  "ruleIds" : "RC-M07-03"
+}, {
+  "action" : "新增",
+  "id" : 365,
+  "caseName" : "M07-TC-07 编辑态模型ID字段禁用且保存后归属不变（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-04：GIVEN 打开某模型的编辑态 WHEN 查看表单并保存 THEN 模型ID 字段为禁用状态，保存后该记录 model_id 不变。",
+  "precondition" : "model_config 中存在 model_id='glm' 的记录。",
+  "dataRequirement" : "打开 model_id='glm' 的编辑态，确认模型ID 输入框 disabled；修改名称后保存，预期 model_id 仍为 'glm' 且未产生新记录。",
+  "ruleIds" : "RC-M07-04"
+}, {
+  "action" : "新增",
+  "id" : 366,
+  "caseName" : "M07-TC-08 新增模型序号为现有最大值加一且追加列表末尾（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-05：GIVEN 模型目录已存在若干配置且最大序号为 N WHEN 新增一个模型并保存 THEN 该模型序号为 N+1 并出现在左侧列表末尾。",
+  "precondition" : "model_config 中存在 3 条记录，seq 分别为 1、2、3。",
+  "dataRequirement" : "新增模型ID='claude' 的配置；预期其 seq=4，且左侧列表最后一项为 claude。",
+  "ruleIds" : "RC-M07-05"
+}, {
+  "action" : "新增",
+  "id" : 367,
+  "caseName" : "M07-TC-09 新增模型后立即可被下游下拉选择（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-14、RC-M07-10：GIVEN 模型ID 合法且不重复 WHEN 保存成功后查看 Agent 配置与通用 Agent 集成的模型下拉 THEN 该模型可被选择，且未自动产生任何引用关系。",
+  "precondition" : "M10 Agent 配置页与 M08 通用Agent集成页可访问。",
+  "dataRequirement" : "新增模型ID='qwen-max'；预期两个下拉中均出现 qwen-max；agent_definition、agent_env_config、agent_integration 中无自动新增的引用记录。",
+  "ruleIds" : "RC-M07-10,RC-M07-14"
+}, {
+  "action" : "新增",
+  "id" : 368,
+  "caseName" : "M07-TC-10 名称、说明与BASE_URL按提交值整体覆盖（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-06 分支b：GIVEN 模型已填写名称、说明与两个 BASE_URL WHEN 修改四个字段后提交保存 THEN 四个字段按提交值整体覆盖并在详情展示最新内容。",
+  "precondition" : "model_config 中存在 model_id='glm' 的记录，四个字段均有原值。",
+  "dataRequirement" : "名称改为「GLM 大模型」，说明改为「通用中文对话模型」，ANTHROPIC_BASE_URL 与 OPENAI_BASE_URL 均改为新的端点；预期库中四字段与新提交值一致。",
+  "ruleIds" : "RC-M07-06"
+}, {
+  "action" : "新增",
+  "id" : 369,
+  "caseName" : "M07-TC-11 可空字段清空或留空时不触发校验并保存成功（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-06 分支a：GIVEN 名称、说明与两个 BASE_URL 分别置为空值、空串或仅空白 WHEN 提交保存 THEN 均保存成功且不触发校验拒绝。",
+  "precondition" : "已进入模型配置页的编辑态。",
+  "dataRequirement" : "将四个字段分别置为空串、仅空白、清空后提交保存；预期保存成功，库中对应字段按空值存储，页面不报错。",
+  "ruleIds" : "RC-M07-06"
+}, {
+  "action" : "新增",
+  "id" : 370,
+  "caseName" : "M07-TC-12 列表与详情返回掩码值且不含明文（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-07 分支a：GIVEN 库中前端与后端 ApiKey 均为已知明文 WHEN 读取列表与详情 THEN 两字段返回值均为掩码形态，响应报文中不含明文。",
+  "precondition" : "model_config 中某记录的 front_api_key='sk-front-1234567890'、backend_api_key='sk-back-0987654321'。",
+  "dataRequirement" : "读取列表与详情接口返回报文；预期两字段均为「前 3 位 + 打码段 + 后 4 位」形态，报文中检索不到完整明文。",
+  "ruleIds" : "RC-M07-07"
+}, {
+  "action" : "新增",
+  "id" : 371,
+  "caseName" : "M07-TC-13 ApiKey长度不超过7位时全部打码（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-07 分支a（长度边界）：GIVEN ApiKey 长度分别为 1、6、7 位 WHEN 读取详情 THEN 全部字符被打码。",
+  "precondition" : "分别构造 front_api_key 长度为 1、6、7 的三条记录。",
+  "dataRequirement" : "读取三条记录的详情；预期三种长度下返回值均无任何明文位（打码字符形态依据 Q-M07-06 结论）。",
+  "ruleIds" : "RC-M07-07"
+}, {
+  "action" : "新增",
+  "id" : 372,
+  "caseName" : "M07-TC-14 ApiKey长度8位时保留前3后4（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-07 分支a（长度边界）：GIVEN ApiKey 长度为 8 位 WHEN 读取详情 THEN 保留前 3 位与后 4 位，中间 1 位打码。",
+  "precondition" : "构造 front_api_key='abcdefgh'（长度 8）的记录。",
+  "dataRequirement" : "读取详情；预期返回形态保留 'abc' 与 'fgh'，中间 1 位被打码（打码字符形态依据 Q-M07-06 结论）。",
+  "ruleIds" : "RC-M07-07"
+}, {
+  "action" : "新增",
+  "id" : 373,
+  "caseName" : "M07-TC-15 详情表单ApiKey按掩码回显并给出悬停提示（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-07 分支b：GIVEN 打开某模型的编辑态 WHEN 查看 ApiKey 输入框与悬停提示 THEN 输入框按掩码回显，提示文案为「仅显示前3位与后4位；保持不变请勿修改，重新输入完整Key则覆盖原值」。",
+  "precondition" : "model_config 中存在带 ApiKey 的记录。",
+  "dataRequirement" : "无需特定业务数据；检查前端与后端 ApiKey 输入框的 value 为掩码值，悬停后展示规定文案。",
+  "ruleIds" : "RC-M07-07"
+}, {
+  "action" : "新增",
+  "id" : 374,
+  "caseName" : "M07-TC-16 提交掩码值时库中明文不被覆盖（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-08：GIVEN 库中 ApiKey 为已知明文 P 且 ApiKey 输入框仍为掩码值 WHEN 提交保存 THEN 库中仍为明文 P，未被掩码串覆盖，且不产生提示。",
+  "precondition" : "model_config 中某记录 front_api_key='sk-front-1234567890' 并已读取其掩码展示值。",
+  "dataRequirement" : "不改动 ApiKey 输入框直接保存；预期库中 front_api_key 仍为 'sk-front-1234567890'，无覆盖提示。",
+  "ruleIds" : "RC-M07-08"
+}, {
+  "action" : "新增",
+  "id" : 375,
+  "caseName" : "M07-TC-17 重新输入完整ApiKey后整体覆盖（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-08：GIVEN 库中 ApiKey 为已知明文 P WHEN 在输入框中重新输入完整值 Q 并保存 THEN 库中值被整体覆盖为 Q，再次读取时展示为 Q 的掩码值。",
+  "precondition" : "model_config 中某记录 front_api_key='sk-front-1234567890'。",
+  "dataRequirement" : "输入完整值 'sk-new-key-9876543210' 后保存；预期库中值为该完整值，详情展示为对应掩码值。",
+  "ruleIds" : "RC-M07-08"
+}, {
+  "action" : "新增",
+  "id" : 376,
+  "caseName" : "M07-TC-18 前端与后端ApiKey的未修改判定相互独立（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-08（字段独立）：GIVEN 前端 ApiKey 提交掩码值、后端 ApiKey 提交完整新值 WHEN 保存 THEN 前者保留原明文、后者被整体覆盖，两字段互不影响。",
+  "precondition" : "model_config 中某记录 front_api_key 与 backend_api_key 均为已知明文。",
+  "dataRequirement" : "前端 ApiKey 输入框保持掩码不变，后端 ApiKey 输入框输入新的完整值；预期仅 backend_api_key 被覆盖，front_api_key 保持原明文。",
+  "ruleIds" : "RC-M07-08"
+}, {
+  "action" : "新增",
+  "id" : 377,
+  "caseName" : "M07-TC-19 提交与掩码形态不一致的值时触发覆盖（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-08：GIVEN 当前掩码形态为「前3+打码+后4」 WHEN 提交一个与之不完全相同、但仍呈掩码样式的值 THEN 判定为已修改并整体覆盖，不得误判为未修改。",
+  "precondition" : "model_config 中某记录 front_api_key='sk-front-1234567890'，掩码形态为「前3位 + 打码段 + 后4位」。",
+  "dataRequirement" : "提交值「sk-****7890」（与当前掩码不完全一致，如打码段长度或字符不同）；预期库中值被覆盖为该提交值，不得保留原明文。",
+  "ruleIds" : "RC-M07-08"
+}, {
+  "action" : "新增",
+  "id" : 378,
+  "caseName" : "M07-TC-20 删除被Agent引用的模型时直接删除且无引用校验（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-09 与 RC-M07-23 联合：GIVEN 某模型已被 Agent 配置引用 WHEN 删除该模型 THEN 删除成功、从列表移除，删除前无引用校验拦截（判定依据 Q-M07-01 结论）。",
+  "precondition" : "agent_definition 中存在 model='glm' 的记录；model_config 中存在 model_id='glm'。",
+  "dataRequirement" : "删除 model_id='glm'；预期删除成功，model_config 中该记录消失，agent_definition.model 仍为 'glm' 形成悬空值，全程无「被引用不可删除」类提示。",
+  "ruleIds" : "RC-M07-09,RC-M07-23"
+}, {
+  "action" : "新增",
+  "id" : 379,
+  "caseName" : "M07-TC-21 列表按序号升序返回（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-11：GIVEN 存在 3 条以上模型配置且序号非连续 WHEN 读取模型列表 THEN 按序号升序返回。",
+  "precondition" : "model_config 中存在 seq 为 1、5、9 的三条记录。",
+  "dataRequirement" : "读取模型列表；预期返回顺序为 seq 1、5、9。",
+  "ruleIds" : "RC-M07-11"
+}, {
+  "action" : "新增",
+  "id" : 380,
+  "caseName" : "M07-TC-22 平台预置模型清单齐备（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-12：GIVEN 平台已完成初始化 WHEN 查看模型目录 THEN 预置的 8 项模型标识齐备（清单与 model_id / name 映射依据 Q-M07-10 结论）。",
+  "precondition" : "平台初始化完成，模型配置页可访问。",
+  "dataRequirement" : "检查模型目录含 DeepSeek Pro、DeepSeek Flash、GLM、GLM Flash、QWen Max、Qwen Flash、GPT、Claude 共 8 项，且同样按本模块规则可维护。",
+  "ruleIds" : "RC-M07-12"
+}, {
+  "action" : "新增",
+  "id" : 381,
+  "caseName" : "M07-TC-23 model_config表结构与字段约束（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-13：GIVEN 存在模型配置数据 WHEN 检查 model_config 结构与字段 THEN 字段齐备、主键为模型ID、无 created_at 与逻辑删除标志、更新时间由系统自动记录。",
+  "precondition" : "model_config 存在至少 1 条记录。",
+  "dataRequirement" : "检查表含 model_id（主键，varchar(32)）、name（varchar(64)）、description（varchar(256)）、seq（int NOT NULL）、front_api_key、backend_api_key、anthropic_base_url、openai_base_url（均 varchar(256)）、updated_at（datetime(6)）；修改并保存后 updated_at 由系统更新，无需人工传入。",
+  "ruleIds" : "RC-M07-13"
+}, {
+  "action" : "新增",
+  "id" : 382,
+  "caseName" : "M07-TC-24 新增保存成功产生记录且不被自动引用（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-14：GIVEN 模型ID 合法且不重复 WHEN 提交新增保存成功 THEN 产生一条模型配置记录，出现在列表末尾，且不自动被任何 Agent 引用。",
+  "precondition" : "model_config 已有记录，当前最大 seq 为 N。",
+  "dataRequirement" : "新增 model_id='gpt'；预期新增 1 条记录且 seq=N+1，列表末尾出现该项；agent_definition 与 agent_integration 记录集合不变。",
+  "ruleIds" : "RC-M07-14"
+}, {
+  "action" : "新增",
+  "id" : 383,
+  "caseName" : "M07-TC-25 新增保存失败时关闭新增态且不写本地列表（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-15：GIVEN 构造新增模型保存接口返回错误 WHEN 提交新增 THEN 新增态关闭并提示失败原因，客户端列表不新增行。",
+  "precondition" : "已进入模型配置页的新增态，记录保存前的列表内容。",
+  "dataRequirement" : "使保存接口异常后提交新增；预期新增态关闭、展示失败原因提示、左侧列表不出现新行。",
+  "ruleIds" : "RC-M07-15"
+}, {
+  "action" : "新增",
+  "id" : 384,
+  "caseName" : "M07-TC-26 模型配置页结构与文案完整性（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-16：GIVEN 进入环境管理 / 系统配置 / 模型配置 WHEN 检查页面 THEN 标题、说明、主操作与元素清单符合规定，且左侧点击切换、新增进入新建态。",
+  "precondition" : "已进入模型配置页。",
+  "dataRequirement" : "预期标题「模型配置」；说明为「维护平台可用模型的ID、名称、说明、ANTHROPIC/OPENAI BASE_URL与前端/后端ApiKey；Agent配置与通用Agent集成的模型选项均取自此页，预置：DeepSeek Pro、DeepSeek Flash、GLM、GLM Flash、QWen Max、Qwen Flash、GPT、Claude」；主操作「新增模型配置」；左侧列表含模型ID、名称、选中态与页脚「N个模型」。",
+  "ruleIds" : "RC-M07-16"
+}, {
+  "action" : "新增",
+  "id" : 385,
+  "caseName" : "M07-TC-27 模型表单结构与主操作完整性（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-17：GIVEN 分别进入新建态与编辑态 WHEN 检查表单 THEN 主操作与元素清单符合规定，保存成功与失败均以浮动提示给出。",
+  "precondition" : "已进入模型配置页。",
+  "dataRequirement" : "预期主操作「保存模型配置」；新建态含「取消」，编辑态含「删除模型配置」；元素含模型ID（新建可填、编辑禁用）、名称、说明、ANTHROPIC_BASE_URL、OPENAI_BASE_URL、前端ApiKey、后端ApiKey；保存成功与失败均为浮动提示。",
+  "ruleIds" : "RC-M07-17"
+}, {
+  "action" : "新增",
+  "id" : 386,
+  "caseName" : "M07-TC-28 打开页面默认展示首个模型详情（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-18：GIVEN 模型目录存在多个模型且序号非连续 WHEN 打开模型配置页 THEN 左侧按序号展示模型ID与名称，右侧默认展示序号最小的首个模型详情。",
+  "precondition" : "model_config 中存在 seq 为 1、5、9 的三条记录。",
+  "dataRequirement" : "打开模型配置页；预期左侧顺序为 seq 1、5、9，右侧表单回显 seq=1 对应的模型内容。",
+  "ruleIds" : "RC-M07-18"
+}, {
+  "action" : "新增",
+  "id" : 387,
+  "caseName" : "M07-TC-29 无模型时左右两侧展示空态与引导（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-19：GIVEN model_config 无任何记录 WHEN 打开模型配置页 THEN 右侧展示「暂无模型配置」与「点击「新增模型配置」创建第一个模型」，左侧展示「暂无模型配置」，且不报错。",
+  "precondition" : "清空 model_config 表。",
+  "dataRequirement" : "清空后打开模型配置页；预期左右两侧空态文案齐备，主操作「新增模型配置」仍可用。",
+  "ruleIds" : "RC-M07-19"
+}, {
+  "action" : "新增",
+  "id" : 388,
+  "caseName" : "M07-TC-30 模型接口不可用时展示失败提示而非空态（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-20：GIVEN 模型列表或详情读取接口不可用 WHEN 打开模型配置页 THEN 展示失败提示，不展示为空态，不白屏。",
+  "precondition" : "构造模型列表或详情读取接口返回错误。",
+  "dataRequirement" : "使读取接口异常后打开页面；预期展示失败提示，页面无空态文案与白屏（提示形式依据 Q-M07-13 结论）。",
+  "ruleIds" : "RC-M07-20"
+}, {
+  "action" : "新增",
+  "id" : 389,
+  "caseName" : "M07-TC-31 仅修改名称与BASE_URL保存后ApiKey保持原明文（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-21 分支a、分支c：GIVEN 库中 ApiKey 为已知明文 P 且输入框仍为掩码值 WHEN 仅修改名称与 BASE_URL 后保存 THEN 详情展示最新内容且库中 ApiKey 仍为 P。",
+  "precondition" : "model_config 中某记录 front_api_key 与 backend_api_key 均为已知明文，名称与 BASE_URL 为原值。",
+  "dataRequirement" : "修改名称与两个 BASE_URL 后保存；预期详情展示最新值，两个 ApiKey 库中值仍为原明文，未被掩码串覆盖。",
+  "ruleIds" : "RC-M07-21"
+}, {
+  "action" : "新增",
+  "id" : 390,
+  "caseName" : "M07-TC-32 重新输入完整ApiKey保存后展示新的掩码值（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-21 分支b：GIVEN 库中 ApiKey 为已知明文 P WHEN 重新输入完整值 Q 并保存 THEN 库中被覆盖为 Q，详情展示 Q 的掩码值。",
+  "precondition" : "model_config 中某记录 front_api_key 为已知明文。",
+  "dataRequirement" : "输入完整新值后保存并重新读取详情；预期库中值为新完整值，展示为对应的新掩码值。",
+  "ruleIds" : "RC-M07-21"
+}, {
+  "action" : "新增",
+  "id" : 391,
+  "caseName" : "M07-TC-33 编辑保存时模型ID不存在提示模型不存在（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-22：GIVEN 编辑保存请求携带不存在的模型 ID WHEN 提交保存 THEN 提示「模型不存在：X」，不新增记录、不改动其它模型。",
+  "precondition" : "model_config 中存在 model_id='glm'，不存在 'not-exist'。",
+  "dataRequirement" : "以 model_id='not-exist' 提交编辑保存；预期提示「模型不存在：not-exist」，记录集合与 'glm' 的内容均不变。",
+  "ruleIds" : "RC-M07-22"
+}, {
+  "action" : "新增",
+  "id" : 392,
+  "caseName" : "M07-TC-34 删除未被引用的模型时移除并提示成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-23：GIVEN 存在一个未被任何下游引用的模型 WHEN 点击「删除模型配置」 THEN 该模型从左侧列表移除并提示删除成功。",
+  "precondition" : "model_config 中存在 model_id='qwen-flash'，无下游引用。",
+  "dataRequirement" : "删除 model_id='qwen-flash'；预期该记录被删除、左侧列表不再包含该项、提示删除成功（提示形式与是否二次确认依据 Q-M07-12 结论）。",
+  "ruleIds" : "RC-M07-23"
+}, {
+  "action" : "新增",
+  "id" : 393,
+  "caseName" : "M07-TC-35 删除时模型ID不存在提示模型不存在（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-24：GIVEN 删除请求携带不存在的模型 ID WHEN 提交删除 THEN 提示「模型不存在：X」，列表内容不变。",
+  "precondition" : "model_config 中存在 model_id='glm'，不存在 'not-exist'。",
+  "dataRequirement" : "以 model_id='not-exist' 提交删除；预期提示「模型不存在：not-exist」，记录集合不变。",
+  "ruleIds" : "RC-M07-24"
+}, {
+  "action" : "新增",
+  "id" : 394,
+  "caseName" : "M07-TC-36 Agent配置模型下拉与模型目录一致（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-25 分支a、RC-M07-10：GIVEN 模型目录存在多个模型 WHEN 打开 Agent 配置的模型下拉 THEN 选项与模型目录一致，且该下拉无独立维护的模型来源。",
+  "precondition" : "model_config 存在 3 条以上记录；M10 Agent 配置页可访问。",
+  "dataRequirement" : "打开 Agent 配置的模型下拉；预期选项集合与模型目录的模型标识集合完全一致，无缺失、无多余。",
+  "ruleIds" : "RC-M07-10,RC-M07-25"
+}, {
+  "action" : "新增",
+  "id" : 395,
+  "caseName" : "M07-TC-37 通用Agent集成默认模型下拉与模型目录一致（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-25 分支a、RC-M07-10：GIVEN 模型目录存在多个模型 WHEN 打开通用 Agent 集成的默认模型下拉 THEN 选项与模型目录一致。",
+  "precondition" : "model_config 存在 3 条以上记录；M08 通用Agent集成页可访问。",
+  "dataRequirement" : "打开通用 Agent 集成的默认模型下拉；预期选项集合与模型目录一致。",
+  "ruleIds" : "RC-M07-10,RC-M07-25"
+}, {
+  "action" : "新增",
+  "id" : 396,
+  "caseName" : "M07-TC-38 模型目录为空时下游下拉为空且不报错（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-25 分支b：GIVEN 模型目录为空 WHEN 打开下游模型下拉 THEN 下拉为空且不报错。",
+  "precondition" : "清空 model_config 表。",
+  "dataRequirement" : "分别打开 Agent 配置与通用 Agent 集成的模型下拉；预期下拉无选项，页面无错误提示与异常日志。",
+  "ruleIds" : "RC-M07-25"
+}, {
+  "action" : "新增",
+  "id" : 397,
+  "caseName" : "M07-TC-39 派生展示信息不单独存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-26：GIVEN 模型目录存在数据 WHEN 检查数据存储载体 THEN 模型数量、ApiKey 掩码值与下游下拉选项集合均为派生信息，无独立存储字段。",
+  "precondition" : "model_config 存在多条记录。",
+  "dataRequirement" : "检查表结构与接口返回：页脚「N个模型」由记录数派生、掩码值由明文派生、下拉选项集合由模型目录派生，数据库中无对应字段。",
+  "ruleIds" : "RC-M07-26"
+}, {
+  "action" : "新增",
+  "id" : 398,
+  "caseName" : "M07-TC-40 新增模型ID校验三态联合验证（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-01、RC-M07-02、RC-M07-03 联合：GIVEN 依次构造模型ID 为空、超长、重复三种输入 WHEN 分别提交新增 THEN 三者均被拒绝并给出各自对应的提示。",
+  "precondition" : "model_config 中已存在 model_id='deepseek-pro'。",
+  "dataRequirement" : "依次提交空模型ID、33 字符模型ID、model_id='deepseek-pro'；预期分别提示「模型ID不能为空」、超限提示（文案依据 Q-M07-05 结论）、「已存在该模型ID的配置：deepseek-pro」；任一分支未按预期拒绝即判定不满足。",
+  "ruleIds" : "RC-M07-01,RC-M07-02,RC-M07-03"
+}, {
+  "action" : "新增",
+  "id" : 399,
+  "caseName" : "M07-TC-41 编辑仅改名称的场景端到端一致性（正向）",
+  "direction" : "正向",
+  "description" : "RC-M07-07、RC-M07-08、RC-M07-21 联合：GIVEN 某模型既有 ApiKey 明文与下游引用 WHEN 仅修改名称后保存 THEN 库中 ApiKey 不变、详情展示最新名称与掩码、下游引用不受影响，三者同时成立。",
+  "precondition" : "model_config 中某记录 ApiKey 为已知明文 P；agent_definition 中存在引用该模型的记录。",
+  "dataRequirement" : "仅修改名称后保存，并在同一会话内依次观察库中 ApiKey、详情展示与下游引用；预期 ApiKey 仍为 P、详情名称与掩码正确、agent_definition.model 未变；仅局部成立不足以判定通过。",
+  "ruleIds" : "RC-M07-07,RC-M07-08,RC-M07-21"
+}, {
+  "action" : "新增",
+  "id" : 400,
+  "caseName" : "M07-TC-42 删除后再次新增的序号取值与列表顺序（反向）",
+  "direction" : "反向",
+  "description" : "RC-M07-11 与 RC-M07-05 联合：GIVEN 删除中间序号的一条模型配置 WHEN 再次新增模型 THEN 列表仍按序号升序返回，新增序号取值符合规定口径（依据 Q-M07-03 结论）。",
+  "precondition" : "model_config 中 seq 为 1、2、3 三条记录，无下游引用。",
+  "dataRequirement" : "删除 seq=2 的记录后再新增一个模型；预期列表按 seq 升序返回且顺序正确，新增记录的 seq 取值符合 Q-M07-03 的结论（不重排 / 重排后递增 / 补齐空缺之一）。",
+  "ruleIds" : "RC-M07-05,RC-M07-11"
+} ]

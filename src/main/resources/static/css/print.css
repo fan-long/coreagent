@@ -1,0 +1,82 @@
+/*
+ * 打印令牌包，见详细设计 §4.6。
+ *
+ * 设计要点：
+ * 1. **只覆盖令牌取值，不重写任何选择器**——这是令牌体系带来的直接收益：打印主题 = 另一套令牌值；
+ * 2. 令牌覆盖**内联在本文件中**，不依赖 GET /api/theme/tokens，离线或接口故障时打印仍然正确；
+ * 3. 去掉全部渐变与阴影，不输出大面积深色背景（ft-FT-002-12、原始需求 §1.4）；
+ * 4. 金色在纸面白底上对比度不足，压深为 #7A5C12；语义色一并取浅色基线取值，保证纸面可读。
+ *
+ * 与 tokens.css、tokens-light.css 同属硬编码扫描白名单（该文件整体是令牌覆盖块）。
+ */
+
+@media print {
+  :root {
+    /* 面层：浅底 */
+    --ca-color-bg-primary: #FFFFFF;
+    --ca-color-bg-secondary: #F5F6F8;
+    --ca-color-bg-elevated: #FFFFFF;
+    --ca-color-bg-hover: #F5F6F8;
+    --ca-color-bg-sunken: #F5F6F8;
+    --ca-color-overlay: rgba(23, 32, 51, 0.28);
+
+    /* 文字：深字 */
+    --ca-color-text-primary: #172033;
+    --ca-color-text-secondary: #4B5768;
+    --ca-color-text-disabled: #6B7789;
+    --ca-color-text-on-accent: #FFFFFF;
+
+    /* 强调：金色压深，纸面可读 */
+    --ca-color-accent-gold: #7A5C12;
+    --ca-color-accent-gold-hover: #7A5C12;
+    --ca-color-accent-gold-dim: #B79B4A;
+    --ca-color-accent-gold-soft: transparent;
+
+    /* 描边 */
+    --ca-color-border-neutral: #D5DBE4;
+    --ca-color-border-control: #8A94A4;
+    --ca-color-border-gold-subtle: #B79B4A;
+    --ca-color-border-gold: #7A5C12;
+
+    /* 语义状态色：取浅色基线取值（色相不变，仅适配纸面明度） */
+    --ca-color-success: #1C7A4F;
+    --ca-color-success-soft: #E6F5EE;
+    --ca-color-warning: #B7791F;
+    --ca-color-warning-soft: #F8E8B7;
+    --ca-color-danger: #A13B3B;
+    --ca-color-danger-soft: #FDF6F6;
+    --ca-color-info: #4B6B8A;
+
+    /* 渐变与阴影全部去掉 */
+    --ca-gradient-gold: none;
+    --ca-shadow-card: none;
+    --ca-shadow-raised: none;
+    --ca-shadow-overlay: none;
+    --ca-shadow-glow-gold: none;
+
+    /* 打印无动效 */
+    --ca-motion-duration-instant: 0ms;
+    --ca-motion-duration-fast: 0ms;
+    --ca-motion-duration-base: 0ms;
+    --ca-motion-duration-slow: 0ms;
+    --ca-motion-duration-skeleton: 0ms;
+  }
+
+  /* 仅保留必要的结构性补充：不输出大面积深色背景 */
+  .app-header,
+  .side-nav,
+  .modal-overlay,
+  .toast {
+    background: transparent;
+  }
+
+  .app-header {
+    border-bottom: 1px solid var(--ca-color-border-neutral);
+  }
+
+  /* 骨架屏在纸面上无意义，转为白底空块 */
+  .skeleton-card {
+    animation: none;
+    background: var(--ca-color-bg-secondary);
+  }
+}

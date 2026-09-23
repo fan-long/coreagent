@@ -1,0 +1,406 @@
+[ {
+  "action" : "新增",
+  "id" : 314,
+  "caseName" : "M02-TC-01 项目名称为空或仅空白时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-01：GIVEN 新增或编辑项目信息 WHEN 项目名称为空串或仅含空白字符并提交保存 THEN 拒绝保存并提示「项目名称不能为空」。",
+  "precondition" : "已进入环境管理 / 项目配置 / 项目信息页。",
+  "dataRequirement" : "分别构造名称输入为空串与仅含空白字符（如三个半角空格）两种输入；预期均被拒绝并提示「项目名称不能为空」，project_info 记录数不变。",
+  "ruleIds" : "RC-M02-01"
+}, {
+  "action" : "新增",
+  "id" : 315,
+  "caseName" : "M02-TC-02 项目名称前后空白裁剪后保存（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-01：GIVEN 项目名称前后含空白字符 WHEN 提交保存 THEN 按裁剪后文本存储。",
+  "precondition" : "已进入项目信息页，名称输入框可用。",
+  "dataRequirement" : "输入名称「  存款核心系统  」；预期 project_info.name 存储为「存款核心系统」，顶栏与列表均展示裁剪后文本。",
+  "ruleIds" : "RC-M02-01"
+}, {
+  "action" : "新增",
+  "id" : 316,
+  "caseName" : "M02-TC-03 项目名称 128 字符边界保存成功（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-02：GIVEN 项目名称长度恰为 128 个字符 WHEN 提交保存 THEN 保存成功。",
+  "precondition" : "已进入项目信息页（计数口径依据 Q-M02-14 结论）。",
+  "dataRequirement" : "构造长度为 128 个字符的名称；预期保存成功，project_info.name 完整存储 128 字符。",
+  "ruleIds" : "RC-M02-02"
+}, {
+  "action" : "新增",
+  "id" : 317,
+  "caseName" : "M02-TC-04 项目名称超过 128 字符拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-02：GIVEN 项目名称长度为 129 个字符 WHEN 提交保存 THEN 拒绝保存并提示「项目名称不能超过128个字符」。",
+  "precondition" : "已进入项目信息页（计数口径依据 Q-M02-14 结论）。",
+  "dataRequirement" : "构造长度为 129 个字符的名称；预期拒绝保存并提示「项目名称不能超过128个字符」，project_info 中该记录字段值不变。",
+  "ruleIds" : "RC-M02-02"
+}, {
+  "action" : "新增",
+  "id" : 318,
+  "caseName" : "M02-TC-05 项目名称含空白时按裁剪后长度判定（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-01 与 RC-M02-02：GIVEN 项目名称含前后空白且原长度超过 128 WHEN 提交保存 THEN 按裁剪后长度判定，不因空白导致超限误报。",
+  "precondition" : "已进入项目信息页。",
+  "dataRequirement" : "构造「两个前导空格 + 128 个字符 + 两个尾随空格」的输入；预期裁剪后为 128 字符，保存成功。",
+  "ruleIds" : "RC-M02-01,RC-M02-02"
+}, {
+  "action" : "新增",
+  "id" : 319,
+  "caseName" : "M02-TC-06 项目目标与范围裁剪与空值存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-03：GIVEN 项目目标与范围分别填写含前后空白的文本、空串 WHEN 提交保存 THEN 存储为裁剪后文本，空串按空值存储。",
+  "precondition" : "已进入项目信息页。",
+  "dataRequirement" : "项目目标输入「  建设核心存款系统  」，项目范围输入空串；预期 goal 存储为「建设核心存款系统」，scope 按空值（NULL 或空串）存储。",
+  "ruleIds" : "RC-M02-03"
+}, {
+  "action" : "新增",
+  "id" : 320,
+  "caseName" : "M02-TC-07 项目目标与范围清空后展示为空且不报错（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-03 分支d：GIVEN 项目目标与范围已有值 WHEN 将其清空并保存后重新打开页面 THEN 按空值存储，页面展示为空且不报错。",
+  "precondition" : "某项目已填写项目目标与项目范围。",
+  "dataRequirement" : "将 goal 与 scope 均清空后保存并刷新页面；预期两字段存储为空值，页面显示为空且无错误提示与异常日志。",
+  "ruleIds" : "RC-M02-03"
+}, {
+  "action" : "新增",
+  "id" : 321,
+  "caseName" : "M02-TC-08 工程阶段以英文逗号分隔文本存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-04：GIVEN 项目工程阶段含多个阶段 WHEN 提交保存 THEN 存储为英文逗号分隔的文本。",
+  "precondition" : "已进入项目信息页，阶段列表含至少 3 个阶段。",
+  "dataRequirement" : "阶段为「需求分析、技术设计、代码生成、测试验证、知识沉淀」；预期 project_info.stages 存储为英文逗号分隔文本，分隔符为半角逗号。",
+  "ruleIds" : "RC-M02-04"
+}, {
+  "action" : "新增",
+  "id" : 322,
+  "caseName" : "M02-TC-09 工程阶段字段为空时回落默认五阶段（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-05：GIVEN project_info.stages 为 NULL 或空串 WHEN 打开项目信息页 THEN 展示默认五阶段（需求分析、技术设计、代码生成、测试验证、知识沉淀）且不报错。",
+  "precondition" : "构造 project_info.stages 为 NULL、空串、仅含分隔符三种形态的记录。",
+  "dataRequirement" : "分别将 stages 置为 NULL、''、',' 三种取值；预期三种情况下页面均展示默认五阶段且无错误提示。",
+  "ruleIds" : "RC-M02-05"
+}, {
+  "action" : "新增",
+  "id" : 323,
+  "caseName" : "M02-TC-10 阶段集合去重、忽略空白项并保持输入顺序（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-06：GIVEN 提交的阶段集合含重复项、仅空白项且输入顺序与字典序不同 WHEN 提交保存 THEN 去重、忽略空白项、保持输入顺序。",
+  "precondition" : "已进入项目信息页，可增删阶段。",
+  "dataRequirement" : "输入阶段序列「代码评审、需求分析、仅空白的项、代码评审、技术设计、代码生成、知识沉淀」；预期保存结果为「代码评审,需求分析,技术设计,代码生成,知识沉淀」（顺序与输入一致，重复项合并，空白项被忽略）。",
+  "ruleIds" : "RC-M02-06"
+}, {
+  "action" : "新增",
+  "id" : 324,
+  "caseName" : "M02-TC-11 缺失单个锁定阶段时拒绝保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-07：GIVEN 保存后的阶段集合缺少 1 个锁定阶段 WHEN 提交保存 THEN 拒绝保存并提示「工程阶段「X」为锁定阶段，不可删除或改名」。",
+  "precondition" : "阶段列表已加载，锁定阶段为需求分析、技术设计、代码生成、知识沉淀。",
+  "dataRequirement" : "删除锁定阶段「技术设计」后提交保存；预期拒绝保存，提示文案含「技术设计」，project_info.stages 未变化。",
+  "ruleIds" : "RC-M02-07"
+}, {
+  "action" : "新增",
+  "id" : 325,
+  "caseName" : "M02-TC-12 缺失多个锁定阶段时提示列出全部缺失阶段（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-07：GIVEN 保存后的阶段集合缺少多个锁定阶段 WHEN 提交保存 THEN 拒绝保存并列出全部缺失的锁定阶段。",
+  "precondition" : "阶段列表已加载。",
+  "dataRequirement" : "删除锁定阶段「需求分析」与「知识沉淀」后提交保存；预期拒绝保存，提示列出「需求分析」与「知识沉淀」两项，project_info.stages 未变化。",
+  "ruleIds" : "RC-M02-07"
+}, {
+  "action" : "新增",
+  "id" : 326,
+  "caseName" : "M02-TC-13 锁定阶段只读加粗且无删除入口（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-08：GIVEN 阶段列表包含锁定阶段 WHEN 查看阶段表格 THEN 锁定阶段为只读加粗文本且不渲染输入框与删除按钮，非锁定阶段可编辑可删除。",
+  "precondition" : "阶段列表含 4 个锁定阶段与至少 1 个非锁定阶段（如「测试验证」）。",
+  "dataRequirement" : "无需特定业务数据；检查阶段表格各行结构：锁定阶段行无 input 与删除按钮，非锁定阶段行为输入框且有删除按钮。",
+  "ruleIds" : "RC-M02-08"
+}, {
+  "action" : "新增",
+  "id" : 327,
+  "caseName" : "M02-TC-14 阶段改名时迁移该阶段下全部 Agent 归属（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-09：GIVEN 某非锁定阶段下挂有若干 Agent WHEN 一次保存中删除该阶段并新增另一个阶段 THEN 该阶段下全部 Agent 的一级分类归属迁移为新阶段名。",
+  "precondition" : "存在非锁定阶段「代码评审」，其同名分类下挂有 2 个 Agent（agent_definition.category='代码评审'）。",
+  "dataRequirement" : "一次保存中删除「代码评审」并新增「代码审查」；预期 agent_definition 中 2 条 Agent 的 category 均更新为「代码审查」，Agent 归属不断链。",
+  "ruleIds" : "RC-M02-09"
+}, {
+  "action" : "新增",
+  "id" : 328,
+  "caseName" : "M02-TC-15 仅删除阶段时不触发归属迁移（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-09：GIVEN 某非锁定阶段下挂有 Agent WHEN 一次保存中仅删除该阶段、未新增阶段 THEN 不触发归属迁移，Agent 一级分类归属保持不变。",
+  "precondition" : "存在非锁定阶段「代码评审」，其同名分类下挂有 2 个 Agent。",
+  "dataRequirement" : "仅删除「代码评审」并保存；预期 agent_definition.category 仍为「代码评审」，未被改写。",
+  "ruleIds" : "RC-M02-09"
+}, {
+  "action" : "新增",
+  "id" : 329,
+  "caseName" : "M02-TC-16 阶段与 Agent 分类保持同名同步（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-10：GIVEN 阶段集合发生新增、删除或改名 WHEN 保存成功后查看 Agent 配置的分类列表 THEN 分类名称集合与阶段名称集合保持同名对应关系。",
+  "precondition" : "已进入 Agent 配置页的分类列表与项目信息页阶段列表（非 1 删 1 增场景依据 Q-M02-01 结论）。",
+  "dataRequirement" : "阶段集合为「需求分析、技术设计、代码生成、测试验证、知识沉淀」；预期分类列表中同名分类齐备，无缺失阶段对应分类、无多余分类。",
+  "ruleIds" : "RC-M02-10"
+}, {
+  "action" : "新增",
+  "id" : 330,
+  "caseName" : "M02-TC-17 阶段增删不写 agent_category 表（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-11：GIVEN 存在 agent_category 表记录 WHEN 新增 1 个阶段并删除 1 个非锁定阶段 THEN 分类表记录集合不因阶段增删而变化。",
+  "precondition" : "记录保存前 agent_category 表的全部记录。",
+  "dataRequirement" : "保存阶段变更前后分别查询 agent_category；预期记录集合完全一致，无新增、无删除。",
+  "ruleIds" : "RC-M02-11"
+}, {
+  "action" : "新增",
+  "id" : 331,
+  "caseName" : "M02-TC-18 项目列表按项目 ID 升序返回（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-12：GIVEN 平台存在 3 个以上项目且 ID 非连续 WHEN 读取项目列表 THEN 按项目 ID 升序返回。",
+  "precondition" : "project_info 存在 3 条以上记录，ID 非连续。",
+  "dataRequirement" : "构造 ID 为 1、5、9 三个项目；预期列表返回顺序为 1、5、9。",
+  "ruleIds" : "RC-M02-12"
+}, {
+  "action" : "新增",
+  "id" : 332,
+  "caseName" : "M02-TC-19 更新携带项目 ID 时按 ID 定位更新（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-13 分支a：GIVEN 库中存在多个项目 WHEN 更新请求携带存在的项目 ID THEN 仅该 ID 对应项目被更新。",
+  "precondition" : "project_info 存在 ID 为 1、2、3 的三个项目。",
+  "dataRequirement" : "请求携带 ID=2 更新名称为「存款核心系统」；预期仅 ID=2 的记录被更新，ID=1、3 字段与 updated_at 不变。",
+  "ruleIds" : "RC-M02-13"
+}, {
+  "action" : "新增",
+  "id" : 333,
+  "caseName" : "M02-TC-20 更新未携带项目 ID 时更新首个项目（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-13 分支b：GIVEN 库中存在多个项目 WHEN 更新请求未携带项目 ID THEN 缺省更新 ID 最小的首个项目。",
+  "precondition" : "project_info 存在 ID 为 1、2、3 的三个项目。",
+  "dataRequirement" : "请求不携带项目 ID 更新名称；预期仅 ID=1 的记录被更新，其余项目不变。",
+  "ruleIds" : "RC-M02-13"
+}, {
+  "action" : "新增",
+  "id" : 334,
+  "caseName" : "M02-TC-21 既有 AI 会话保留创建时上下文快照（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-14：GIVEN 已存在使用某项目定义创建的 AI 会话 WHEN 修改项目名称、目标、范围并保存后重新打开既有会话 THEN 会话上下文与创建时一致，未被追溯改写。",
+  "precondition" : "已创建一个「AI 应用组件设计」会话并记录其上下文内容。",
+  "dataRequirement" : "将项目目标由 A 改为 B 后重新打开既有会话；预期会话上下文仍为 A，未被改写为 B。",
+  "ruleIds" : "RC-M02-14"
+}, {
+  "action" : "新增",
+  "id" : 335,
+  "caseName" : "M02-TC-22 项目目标与范围注入组件设计对话上下文（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-15：GIVEN 项目已填写目标与范围 WHEN 新建「AI 应用组件设计」会话 THEN 上下文包含项目目标与项目范围（字段清单依据 Q-M02-02 结论）。",
+  "precondition" : "项目已填写项目目标与项目范围。",
+  "dataRequirement" : "项目目标为「建设新一代核心存款系统」，项目范围为「覆盖存款、账户与利息域」；预期会话上下文包含两项文本。",
+  "ruleIds" : "RC-M02-15"
+}, {
+  "action" : "新增",
+  "id" : 336,
+  "caseName" : "M02-TC-23 人工维护配置不注入对话上下文（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-16：GIVEN 项目已配置需求规格关联等人工维护配置 WHEN 新建「AI 应用组件设计」会话 THEN 上下文不含人工维护的配置字段（清单依据 Q-M02-02 结论）。",
+  "precondition" : "项目已关联需求规格等人工配置字段。",
+  "dataRequirement" : "项目已配置需求规格关联；预期会话上下文中不出现该配置内容。",
+  "ruleIds" : "RC-M02-16"
+}, {
+  "action" : "新增",
+  "id" : 337,
+  "caseName" : "M02-TC-24 Agent 归属迁移失败时保持变更前状态（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-17：GIVEN 构造 Agent 归属迁移失败 WHEN 提交 1 删 1 增的阶段保存 THEN 阶段与 Agent 分类均保持变更前状态，不出现半完成状态。",
+  "precondition" : "存在非锁定阶段「代码评审」及其同名分类下的 Agent；构造分类更新写入异常。",
+  "dataRequirement" : "使 Agent 归属迁移写入失败后提交保存；预期 project_info.stages 与 agent_definition.category 均保持变更前值，无「阶段已改名而 Agent 未迁移」的中间状态。",
+  "ruleIds" : "RC-M02-17"
+}, {
+  "action" : "新增",
+  "id" : 338,
+  "caseName" : "M02-TC-25 新增项目成功且主键自增、不创建关联资产（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-18：GIVEN 新增项目的名称与目标、范围合法 WHEN 提交保存 THEN 新增一条项目记录，主键自增，且不自动创建组件、工作流与 Agent。",
+  "precondition" : "project_info 已有记录，最大 ID 为 N。",
+  "dataRequirement" : "新增名称「存款核心系统」的项目；预期新增 1 条记录且 id > N；component_definition、workflow、agent_definition 记录数不变。",
+  "ruleIds" : "RC-M02-18"
+}, {
+  "action" : "新增",
+  "id" : 339,
+  "caseName" : "M02-TC-26 新增项目未传阶段时按默认预设阶段存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-19：GIVEN 新增项目未提供工程阶段 WHEN 提交保存 THEN 阶段按默认五阶段存储。",
+  "precondition" : "已进入新增项目入口。",
+  "dataRequirement" : "不传 stages 字段提交；预期 project_info.stages 存储为「需求分析,技术设计,代码生成,测试验证,知识沉淀」。",
+  "ruleIds" : "RC-M02-19"
+}, {
+  "action" : "新增",
+  "id" : 340,
+  "caseName" : "M02-TC-27 平台无项目时读取自动创建默认项目行（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-20：GIVEN project_info 表无任何记录 WHEN 打开项目信息页 THEN 自动创建默认项目行（名称「AI新一代核心系统」）并展示其定义，不报错。",
+  "precondition" : "清空 project_info 表。",
+  "dataRequirement" : "清空 project_info 后打开项目信息页；预期自动创建 1 条记录且 name='AI新一代核心系统'，页面正常展示（默认目标、范围、阶段内容依据 Q-M02-05 结论）。",
+  "ruleIds" : "RC-M02-20"
+}, {
+  "action" : "新增",
+  "id" : 341,
+  "caseName" : "M02-TC-28 更新携带的项目 ID 不存在时拒绝并提示（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-21：GIVEN 更新请求携带不存在的项目 ID WHEN 提交保存 THEN 拒绝并提示「项目不存在：X」，不回落更新首个项目。",
+  "precondition" : "project_info 存在 ID 为 1 的项目。",
+  "dataRequirement" : "请求携带 ID=999 更新名称；预期提示「项目不存在：999」，ID=1 的记录未被修改。",
+  "ruleIds" : "RC-M02-21"
+}, {
+  "action" : "新增",
+  "id" : 342,
+  "caseName" : "M02-TC-29 保存成功后顶栏当前项目即时更新（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-22：GIVEN 已打开顶栏 WHEN 修改项目名称并保存成功 THEN 顶栏「当前项目」立即显示新名称。",
+  "precondition" : "已登录平台，顶栏可见，当前项目名称为「存款核心」。",
+  "dataRequirement" : "将项目名称改为「存款核心系统」并保存；预期顶栏文本立即更新为「存款核心系统」，无需刷新页面。",
+  "ruleIds" : "RC-M02-22"
+}, {
+  "action" : "新增",
+  "id" : 343,
+  "caseName" : "M02-TC-30 修改项目定义后新建会话使用最新值（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-22：GIVEN 修改项目目标与范围后 WHEN 新建「AI 应用组件设计」会话 THEN 新会话上下文使用修改后的值。",
+  "precondition" : "项目原目标为 A，已保存。",
+  "dataRequirement" : "将项目目标修改为 B 并保存后新建会话；预期新会话上下文包含 B。",
+  "ruleIds" : "RC-M02-22"
+}, {
+  "action" : "新增",
+  "id" : 344,
+  "caseName" : "M02-TC-31 新建会话上下文含名称、目标与阶段说明（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-23 分支a、分支b：GIVEN 项目已填写目标且工程阶段非空 WHEN 新建「AI 应用组件设计」会话 THEN 上下文含项目名称与项目目标，并附带阶段说明。",
+  "precondition" : "项目名称为「存款核心系统」，目标已填写，阶段为默认五阶段。",
+  "dataRequirement" : "新建会话；预期上下文包含项目名称与项目目标，并包含阶段说明（文案依据 Q-M02-03 结论）。",
+  "ruleIds" : "RC-M02-23"
+}, {
+  "action" : "新增",
+  "id" : 345,
+  "caseName" : "M02-TC-32 项目目标为空时上下文跳过该字段（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-23 分支c：GIVEN 项目目标为空 WHEN 新建「AI 应用组件设计」会话 THEN 上下文跳过该字段，不注入空占位文本。",
+  "precondition" : "项目目标为空值（项目范围为空的情形一并观察）。",
+  "dataRequirement" : "将 goal 置空后新建会话；预期上下文中不含目标字段及空占位文本（如「目标：」）。",
+  "ruleIds" : "RC-M02-23"
+}, {
+  "action" : "新增",
+  "id" : 346,
+  "caseName" : "M02-TC-33 新增非锁定阶段后分类列表随即出现同名分类（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-24 分支a：GIVEN 阶段列表不含某非锁定阶段 WHEN 新增该阶段并保存成功 THEN Agent 配置的分类列表随即出现同名分类。",
+  "precondition" : "已进入项目信息页与 Agent 配置页。",
+  "dataRequirement" : "新增阶段「代码评审」并保存；预期 Agent 配置的分类列表出现「代码评审」分类，且无需重启或额外刷新。",
+  "ruleIds" : "RC-M02-24"
+}, {
+  "action" : "新增",
+  "id" : 347,
+  "caseName" : "M02-TC-34 删除非锁定阶段后分类不再出现（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-24 分支b：GIVEN 阶段列表含某非锁定阶段 WHEN 删除该阶段并保存成功 THEN 该阶段同名分类不再出现在分类列表。",
+  "precondition" : "阶段列表含非锁定阶段「代码评审」。",
+  "dataRequirement" : "删除「代码评审」并保存；预期 Agent 配置的分类列表中不再出现「代码评审」。",
+  "ruleIds" : "RC-M02-24"
+}, {
+  "action" : "新增",
+  "id" : 348,
+  "caseName" : "M02-TC-35 读取接口不可用时展示失败提示（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-25：GIVEN 项目读取接口不可用 WHEN 打开项目信息页 THEN 展示失败提示，不出现空白表单与白屏。",
+  "precondition" : "构造项目信息读取接口返回错误。",
+  "dataRequirement" : "使读取接口异常后打开页面；预期展示失败提示，页面无白屏（提示形式依据 Q-M02-15 结论）。",
+  "ruleIds" : "RC-M02-25"
+}, {
+  "action" : "新增",
+  "id" : 349,
+  "caseName" : "M02-TC-36 保存请求失败时不新增本地项目记录（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-26：GIVEN 新增项目的保存请求失败 WHEN 提交保存 THEN 客户端不新增本地项目记录，并提示失败原因。",
+  "precondition" : "构造新增项目保存接口返回错误。",
+  "dataRequirement" : "使保存接口异常后提交新增；预期项目列表不出现新行，展示失败原因提示。",
+  "ruleIds" : "RC-M02-26"
+}, {
+  "action" : "新增",
+  "id" : 350,
+  "caseName" : "M02-TC-37 项目信息属性完整性与更新时间自动记录（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-27：GIVEN 存在项目记录 WHEN 检查 project_info 结构与字段 THEN 含项目ID、名称、目标、范围、工程阶段与更新时间，且更新时间由系统自动记录。",
+  "precondition" : "project_info 存在 1 条记录。",
+  "dataRequirement" : "检查表结构含 id、name、goal、scope、stages、updated_at 且无 created_at；修改并保存后 updated_at 由系统更新，无需人工传入。",
+  "ruleIds" : "RC-M02-27"
+}, {
+  "action" : "新增",
+  "id" : 351,
+  "caseName" : "M02-TC-38 派生展示信息不单独存储（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-28：GIVEN 打开顶栏与项目信息页 WHEN 检查数据存储载体 THEN 顶栏项目名称、阶段序号与阶段数量均为派生展示，无独立存储字段。",
+  "precondition" : "项目信息页有阶段数据。",
+  "dataRequirement" : "检查数据模型与接口返回：阶段序号与阶段数量由阶段列表派生（序号按存储顺序生成、数量为去重后项数），数据库无对应字段。",
+  "ruleIds" : "RC-M02-28"
+}, {
+  "action" : "新增",
+  "id" : 352,
+  "caseName" : "M02-TC-39 项目信息页结构与文案完整性（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-29：GIVEN 进入环境管理 / 项目配置 / 项目信息 WHEN 检查页面 THEN 标题、说明、主操作与元素清单符合规定，保存成功后顶栏项目名称更新。",
+  "precondition" : "已进入项目信息页。",
+  "dataRequirement" : "预期标题「项目信息」，说明为「配置项目名称、目标、范围与工程阶段；项目名称用于顶栏「当前项目」显示，并生成组件规划Agent的定位提示」，主操作「保存配置」；含提示条、名称输入框（maxlength=128）、项目目标与范围多行文本、工程阶段定义表格。",
+  "ruleIds" : "RC-M02-29"
+}, {
+  "action" : "新增",
+  "id" : 353,
+  "caseName" : "M02-TC-40 工程阶段表格结构与删除交互（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-30：GIVEN 阶段表格含锁定与非锁定阶段 WHEN 检查表格结构并删除一个非锁定阶段 THEN 结构与交互符合规定，删除后即时移除。",
+  "precondition" : "阶段列表含 4 个锁定阶段与至少 2 个非锁定阶段。",
+  "dataRequirement" : "预期含表格上方「新增阶段」与行内「删除阶段」；序号徽标两位补零（如 01、02）；锁定阶段只读无输入框与删除按钮；删除非锁定阶段后该行即时从表格移除。",
+  "ruleIds" : "RC-M02-30"
+}, {
+  "action" : "新增",
+  "id" : 354,
+  "caseName" : "M02-TC-41 校验提示为浮动提示且不阻断操作（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-31：GIVEN 触发名称校验失败与锁定阶段校验失败 WHEN 观察提示形态并在提示出现后操作页面 THEN 以浮动提示给出规定文案，页面其它操作不被阻断。",
+  "precondition" : "已进入项目信息页。",
+  "dataRequirement" : "分别触发「项目名称不能为空」「项目名称不能超过128个字符」「工程阶段「X」为锁定阶段，不可删除或改名」三类提示；预期均为浮动提示，提示期间页面其它输入与按钮仍可操作。",
+  "ruleIds" : "RC-M02-31"
+}, {
+  "action" : "新增",
+  "id" : 355,
+  "caseName" : "M02-TC-42 顶栏当前项目展示与即时刷新（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-32 分支a：GIVEN 平台已存在项目 WHEN 观察顶栏并保存名称变更 THEN 展示当前项目名称与项目切换入口，保存后即时刷新。",
+  "precondition" : "已登录平台，存在至少 1 个项目。",
+  "dataRequirement" : "观察顶栏含当前项目名称与切换入口；修改名称保存后顶栏文本即时更新为最新名称。",
+  "ruleIds" : "RC-M02-32"
+}, {
+  "action" : "新增",
+  "id" : 356,
+  "caseName" : "M02-TC-43 项目数量为 0 时顶栏展示默认项目名称（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-32 分支b：GIVEN 平台项目数量为 0 WHEN 观察顶栏 THEN 展示默认项目名称（取值依据 Q-M02-12 结论）。",
+  "precondition" : "project_info 无记录且尚未触发读取期自动创建。",
+  "dataRequirement" : "清空 project_info 后直接观察顶栏；预期展示默认项目名称而非空白（名称取值依据 Q-M02-12 结论）。",
+  "ruleIds" : "RC-M02-32"
+}, {
+  "action" : "新增",
+  "id" : 357,
+  "caseName" : "M02-TC-44 阶段改名端到端一致性（正向）",
+  "direction" : "正向",
+  "description" : "RC-M02-09、RC-M02-10、RC-M02-11 联合：GIVEN 某非锁定阶段下挂有 Agent WHEN 一次保存中删除该阶段并新增另一个阶段 THEN Agent 归属迁移、分类与阶段同名同步、分类表记录集合不变三者同时成立。",
+  "precondition" : "存在非锁定阶段「代码评审」及其同名分类下的 2 个 Agent；记录保存前 agent_category 记录集合。",
+  "dataRequirement" : "一次保存中删除「代码评审」并新增「代码审查」；预期 Agent 归属迁移为「代码审查」、分类列表与阶段序列同名同步、agent_category 记录集合与保存前一致；仅局部成立不足以判定通过。",
+  "ruleIds" : "RC-M02-09,RC-M02-10,RC-M02-11"
+}, {
+  "action" : "新增",
+  "id" : 358,
+  "caseName" : "M02-TC-45 阶段字段为空回落默认五阶段后可直接保存（反向）",
+  "direction" : "反向",
+  "description" : "RC-M02-05、RC-M02-06、RC-M02-07 联合：GIVEN project_info.stages 为空（页面回落展示默认五阶段，其中 4 项为锁定阶段） WHEN 不修改阶段直接保存 THEN 回落后的阶段集合被接受保存，不因锁定阶段校验误报。",
+  "precondition" : "project_info.stages 为 NULL 或空串。",
+  "dataRequirement" : "打开项目信息页后不修改阶段直接提交保存；预期保存成功，无「锁定阶段不可删除或改名」提示，stages 存储为默认五阶段的逗号分隔文本（是否回写依据 Q-M02-04 结论）。",
+  "ruleIds" : "RC-M02-05,RC-M02-06,RC-M02-07"
+} ]
