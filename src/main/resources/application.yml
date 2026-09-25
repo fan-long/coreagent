@@ -19,7 +19,7 @@ spring:
       - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
       - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
 
-# 视觉主题令牌（ft-FT-002 §3.6）。运维级、非用户可见：无界面入口、无写接口，
+# 视觉主题令牌（DESIGN-FT-002 §4 D-006）。运维级、非用户可见：无界面入口、无写接口，
 # 切换有效取值后需重启服务；前端刷新页面即取得新令牌（令牌接口 Cache-Control: no-store）。
 platform:
   theme:

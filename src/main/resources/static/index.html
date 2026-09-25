@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Core-Agent 工程平台</title>
   <!--
-    样式表加载顺序（ft-FT-002 §4.1）：tokens.css 必须最先且同步加载（无 media 条件、无 defer），
-    保证首帧即黑金，杜绝先浅后深的闪烁；print.css 最后加载，其 @media print 令牌覆盖按需生效。
+    样式表加载顺序（DESIGN-FT-002 §4 D-001/C-07 与 D-005）：tokens.css 必须最先且同步加载
+    （无 media 条件、无 defer），保证首帧即黑金，杜绝先浅后深的闪烁；print.css 最后加载，
+    其 @media print 令牌覆盖按需生效（D-016）。
   -->
   <link rel="stylesheet" href="./css/tokens.css">
   <link rel="stylesheet" href="./css/app.css">

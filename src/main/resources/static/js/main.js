@@ -6,7 +6,7 @@
  * 2. 挂载顶栏与二级导航；
  * 3. 订阅路由，按路由卸载旧视图、挂载新视图（BR-M01-11，主区域同时仅一个功能页面）；
  * 4. 启动路由（无 hash 时回退 #/workbench）；
- * 5. 非阻塞装载视觉主题令牌（ft-FT-002 §4.2），与请求 GET /api/context 并行；
+ * 5. 非阻塞装载视觉主题令牌（DESIGN-FT-002 §4 D-005），与请求 GET /api/context 并行；
  *    首帧已由 tokens.css 静态基线着色，故此步失败不影响渲染与业务功能。
  */
 import { mountAppHeader } from './layout/AppHeader.js';
@@ -110,7 +110,7 @@ function bootstrap() {
   subscribeRouter(mountView);
   startRouter();
 
-  // 非阻塞：不 await，也不参与 mountView 的路由流程——令牌是全局视觉配置，与视图生命周期无关（§4.2）
+  // 非阻塞：不 await，也不参与 mountView 的路由流程——令牌是全局视觉配置，与视图生命周期无关（D-005）
   loadTheme();
   loadContext();
 }

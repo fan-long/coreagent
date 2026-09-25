@@ -1,0 +1,415 @@
+{
+  "results": [
+    {
+      "caseId": "491",
+      "ruleIds": [
+        "RC-FT002-01"
+      ],
+      "status": "通过",
+      "comment": "对照 D-018 硬编码门禁：静态资源全量扫描，界面颜色必须 100% 由 var(--ca-*) 令牌承载。",
+      "proof": "执行 mvn test：ThemeHardcodeScanTest 通过，扫描 24 个 .css/.html/.js，0 处违规。反向对照：临时注入 #ff0000 与 rgba(0,0,0,0.5) 后重跑，门禁按预期失败并列出文件/行号/字面量/选择器上下文，证明门禁真实有效而非空集通过。"
+    },
+    {
+      "caseId": "492",
+      "ruleIds": [
+        "RC-FT002-01"
+      ],
+      "status": "通过",
+      "comment": "变异令牌包，构造「未定义/取值非法」令牌，核对是否以同组回退令牌渲染。",
+      "proof": "以 platform.theme.token-location 指向变异包启动：取值非法令牌回退为同组回退取值（color 组回退为 #0B0B0D），未知分组/名称非法的令牌被丢弃（fallbackValue=null 且不出现在 tokens[] 中），HTTP 仍为 200，warnings 逐条给出 group/name/reason。"
+    },
+    {
+      "caseId": "493",
+      "ruleIds": [
+        "RC-FT002-02"
+      ],
+      "status": "通过",
+      "comment": "核对 77 项令牌的七属性齐备性与取值格式校验（服务端 TokenValidator 与前端 theme.js 同规则）。",
+      "proof": "脚本审计两份令牌包：77 项均含 group/name/value/description/scope/fallback 七属性，description 全部非空，name 全部为 kebab-case。接口返回的 77 项令牌 values 均通过 TokenValidator 校验（warnings=0）。"
+    },
+    {
+      "caseId": "494",
+      "ruleIds": [
+        "RC-FT002-02",
+        "RC-FT002-03"
+      ],
+      "status": "通过",
+      "comment": "核对令牌分组固定为七组且各组数量基数为 32/15/8/5/4/5/8。",
+      "proof": "脚本统计两份包：恰好 7 组，分布为 color 32 / font 15 / space 8 / radius 5 / border 4 / shadow 5 / motion 8，合计 77 项；组键与 TokenGroup 枚举一致。"
+    },
+    {
+      "caseId": "495",
+      "ruleIds": [
+        "RC-FT002-03"
+      ],
+      "status": "通过",
+      "comment": "核对每组回退令牌齐备（D-001/C-05 的 11 项必备回退）与全局令牌未被模块覆盖。",
+      "proof": "每组 fallback:true 数量为 color 5、其余各 1；11 项必备回退令牌（color-bg-primary、color-border-neutral、color-text-primary、color-accent-gold、color-success、font-family-base、space-2、radius-md、border-gold-hairline、shadow-none、motion-duration-fallback）全部存在。77/77 令牌 scope=GLOBAL；前端 theme.js 对非 GLOBAL 令牌走 TOKEN_SCOPE_INVALID 分支拒绝注入（代码核对）。"
+    },
+    {
+      "caseId": "496",
+      "ruleIds": [
+        "RC-FT002-04"
+      ],
+      "status": "通过",
+      "comment": "平台启动后应以黑金令牌完成初始化渲染，且首帧即为黑金（无先浅后深闪烁）。",
+      "proof": "默认配置 platform.theme.active=dark-gold 启动：GET /api/theme/tokens 返回 200、theme=dark-gold、themeName=黑金、77 项令牌、0 warnings。首帧链路核对：index.html 中 tokens.css 最先且同步加载（无 media 条件、无 defer），且 tokens.css 与 dark-gold.json 逐令牌比对 0 处语义差异，故首帧必为黑金。"
+    },
+    {
+      "caseId": "497",
+      "ruleIds": [
+        "RC-FT002-05"
+      ],
+      "status": "部分通过",
+      "comment": "修改令牌值后应全站同步变色：验证「令牌值变更 → 接口下发 → 前端注入」的联动链路。",
+      "proof": "变异令牌包中修改取值后，GET /api/theme/tokens 返回的对应令牌值随之改变，theme.js 的 buildDeclarations 会将其展开为 --ca-* 声明并整体替换 <style id=\"ca-theme-runtime\">。接口与注入链路已证实联动；「全站同步变色」的最终视觉确认需浏览器渲染，本阶段未执行。"
+    },
+    {
+      "caseId": "498",
+      "ruleIds": [
+        "RC-FT002-06"
+      ],
+      "status": "通过",
+      "comment": "运维级浅色回退开关应恢复浅色令牌包（RC-FT002-06）。",
+      "proof": "以 --platform.theme.active=light 启动：info 日志记录生效主题；GET /api/theme/tokens 返回 200、theme=light、themeName=浅色、color-bg-primary=#F3F5F7，与 light.json / tokens-light.css 一致。"
+    },
+    {
+      "caseId": "499",
+      "ruleIds": [
+        "RC-FT002-07"
+      ],
+      "status": "通过",
+      "comment": "令牌未定义或取值非法时应回退渲染并记录告警（DD-004 第①②级）。",
+      "proof": "变异包实测：6 类原因码（TOKEN_GROUP_INVALID / TOKEN_NAME_INVALID / TOKEN_NAME_DUPLICATED / TOKEN_VALUE_INVALID / TOKEN_DESCRIPTION_MISSING / TOKEN_SCOPE_INVALID）行为与设计一致；受影响令牌以同组回退取值渲染或整条丢弃；响应 warnings=6、tokens 仍为 77、状态 200；前端 theme.js 对每条 warning 输出 console.warn。"
+    },
+    {
+      "caseId": "500",
+      "ruleIds": [
+        "RC-FT002-08"
+      ],
+      "status": "部分通过",
+      "comment": "令牌加载失败时应保留页面结构并给出提示、不白屏（DD-004 第③级）。",
+      "proof": "整包失败路径已证实：以非法主题标识启动（--platform.theme.active=bogus-theme），GET /api/theme/tokens 返回 503 且响应体为 M01-E007「主题令牌加载失败，已使用回退主题渲染」，服务端记录 error 日志。前端 theme.js 的 doLoad 捕获异常后调用 degrade()（移除运行时样式回到 tokens.css 静态基线 + toast 提示），且 loadTheme 不抛出、不参与 mountView 路由流程，故业务渲染不受影响。「不白屏」的最终确认需浏览器执行，本阶段未执行。"
+    },
+    {
+      "caseId": "501",
+      "ruleIds": [
+        "RC-FT002-09"
+      ],
+      "status": "未执行",
+      "comment": "正文文字与背景对比度不低于 4.5:1（RC-FT002-09）。需渲染后取计算样式并用工具测量。",
+      "proof": "未执行：需浏览器渲染后测量对比度。且测量口径（检测工具、取色方式、半透明与渐变背景的有效背景色取法）未定义（DQ-008），结果不可复现，故本阶段不做判定。"
+    },
+    {
+      "caseId": "502",
+      "ruleIds": [
+        "RC-FT002-09"
+      ],
+      "status": "未执行",
+      "comment": "大字号文字（≥18.66px 加粗或 ≥24px）与图形边界对比度不低于 3:1（RC-FT002-09）。需渲染后测量。",
+      "proof": "未执行：同 TC-11，依赖浏览器渲染测量与未定的测量口径（DQ-008）。"
+    },
+    {
+      "caseId": "503",
+      "ruleIds": [
+        "RC-FT002-10"
+      ],
+      "status": "通过",
+      "comment": "强调金不得用于长文正文（RC-FT002-10，反向校验）。",
+      "proof": "穷举两处样式表中 color: var(--ca-color-accent-gold) 的全部 15 处，定位各自所属选择器：.brand-mark、.stage-index、.master-list-item.is-active、.primary-nav-item.is-active、.current-project:hover、.icon-button、.button-primary/.button-secondary/.button-ghost、.card-icon、.metric-value、.guide-outline-link:focus、.modal-close:hover——全部为强调元素，无一处为正文/段落选择器。"
+    },
+    {
+      "caseId": "504",
+      "ruleIds": [
+        "RC-FT002-11"
+      ],
+      "status": "部分通过",
+      "comment": "置灰与禁用态元素在降低明度的同时文字对比度不低于 4.5:1（RC-FT002-11，反向校验）。",
+      "proof": "实现核对：app.css:173 与 layout.css:435/535 三处禁用态均显式「不使用整体 opacity」，改为文字与图标取 --ca-color-text-disabled 令牌，避免不透明度叠加导致可读性不可控。代码注释自述「文字对背景 4.58:1 满足 AA」。比值本身需渲染后实测，且设计 D-007/C-01 引用的 4.96:1 为另一组合，未实测，故本阶段不作通过判定（另见问题清单：C-01 措辞与实现不一致）。"
+    },
+    {
+      "caseId": "505",
+      "ruleIds": [
+        "RC-FT002-12"
+      ],
+      "status": "未通过",
+      "comment": "语义状态色（成功/警告/错误/信息）色相须稳定不随主题变化，且必须与强调金在视觉上可区分（RC-FT002-12）。",
+      "proof": "色相稳定性通过：success 150.0°→152.6°、warning 40.0°→35.5°、danger 358.1°→0.0°、info 218.2°→209.5°，跨主题色相漂移均 ≤8.7°。但「与强调金可区分」在浅色包下不成立：tokens-light.css:27 的 color-accent-gold=#29A36A（H=152.0°）为绿色，与同包 color-success=#1C7A4F（H=152.6°）色相差仅 0.6°，主操作/当前导航项与成功态仅靠明度差（40.0% vs 29.4%）区分；且该令牌名为 accent-gold 却在浅色包中不是金色，暗色包（#D4AF37）与打印包（#7A5C12）均为金色，浅色包为唯一例外。浅色包经 --platform.theme.active=light 可达（已实测返回 200）。详见测试报告 §5.1。"
+    },
+    {
+      "caseId": "506",
+      "ruleIds": [
+        "RC-FT002-12"
+      ],
+      "status": "通过",
+      "comment": "危险操作按钮不得使用强调金（RC-FT002-12 / D-007/C-05，反向校验）。",
+      "proof": "穷举全部 danger 相关规则（app.css:107-109 与 400-407、layout.css:721-728/973/1008）：一律取 --ca-color-danger 或 --ca-color-danger-soft（如 .button-danger{ border-color/color: var(--ca-color-danger) }、:hover{ background: var(--ca-color-danger-soft) }），无一处引用 --ca-color-accent-gold。"
+    },
+    {
+      "caseId": "507",
+      "ruleIds": [
+        "RC-FT002-13"
+      ],
+      "status": "部分通过",
+      "comment": "状态语义不得单独依赖颜色传达，必须同时提供图标或文案（RC-FT002-13）。",
+      "proof": "代码核对可证部分：.toast 提示以 textContent 写入文案且按 info/warn/error 分列（不止依赖颜色）；骨架屏以「正在加载…」文案经 aria-live 区域维持可感知性；禁用态保留 cursor:not-allowed 与禁用语义。但状态字典取值域未闭合（DQ-013），无法穷举全部状态呈现点，故不能判定整条通过。"
+    },
+    {
+      "caseId": "508",
+      "ruleIds": [
+        "RC-FT002-14"
+      ],
+      "status": "未执行",
+      "comment": "视觉层级五档（主操作/正文/次要/禁用 + 语义单列）在同一页面可辨识（RC-FT002-14）。",
+      "proof": "未执行：需在同一渲染页面内观察五档层级，依赖浏览器渲染与视觉走查。"
+    },
+    {
+      "caseId": "509",
+      "ruleIds": [
+        "RC-FT002-15"
+      ],
+      "status": "未执行",
+      "comment": "顶栏黑金呈现与当前导航项高亮（RC-FT002-15 等）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。相关样式契约（.primary-nav-item.is-active 取 --ca-color-accent-gold 等）已静态核对，但界面呈现未走查。"
+    },
+    {
+      "caseId": "510",
+      "ruleIds": [
+        "RC-FT002-16"
+      ],
+      "status": "未执行",
+      "comment": "工作台卡片黑金呈现与悬停上浮。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "511",
+      "ruleIds": [
+        "RC-FT002-16",
+        "RC-FT002-11"
+      ],
+      "status": "部分通过",
+      "comment": "未启用组件卡片置灰且文字对比度达标（RC-FT002-11，反向校验）。",
+      "proof": "实现核对：layout.css 中 .component-card.is-disabled 取 --ca-color-bg-secondary 底、--ca-color-border-neutral 描边、--ca-shadow-none，并显式声明「不以整体 opacity 降透明——文字与图标转为禁用令牌」。对比度达标与否需渲染后测量，未执行。"
+    },
+    {
+      "caseId": "512",
+      "ruleIds": [
+        "RC-FT002-17"
+      ],
+      "status": "未执行",
+      "comment": "环境管理侧边栏当前项与角标黑金呈现（RC-FT002-17）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "513",
+      "ruleIds": [
+        "RC-FT002-18"
+      ],
+      "status": "未执行",
+      "comment": "组件信息侧边栏与工程仓库选择器黑金呈现（RC-FT002-18）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "514",
+      "ruleIds": [
+        "RC-FT002-18"
+      ],
+      "status": "未执行",
+      "comment": "不可用入口置灰与提示气泡黑金呈现（RC-FT002-19，反向）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "515",
+      "ruleIds": [
+        "RC-FT002-19"
+      ],
+      "status": "未执行",
+      "comment": "实施说明页阶段表与 AI 职责标签黑金呈现（RC-FT002-20）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "516",
+      "ruleIds": [
+        "RC-FT002-19"
+      ],
+      "status": "未执行",
+      "comment": "实施说明页三类提示态深色适配（RC-FT002-20，反向）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "517",
+      "ruleIds": [
+        "RC-FT002-20"
+      ],
+      "status": "未执行",
+      "comment": "项目切换弹窗黑金呈现（RC-FT002-21）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "518",
+      "ruleIds": [
+        "RC-FT002-20"
+      ],
+      "status": "未执行",
+      "comment": "项目切换弹窗空态深色适配（RC-FT002-21，反向）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "519",
+      "ruleIds": [
+        "RC-FT002-21"
+      ],
+      "status": "未执行",
+      "comment": "页面头部与文档提纲黑金呈现（RC-FT002-22）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "520",
+      "ruleIds": [
+        "RC-FT002-21"
+      ],
+      "status": "部分通过",
+      "comment": "页面数据加载失败应保留结构并提示（RC-FT002-22，反向）。",
+      "proof": "后端契约核对：数据加载异常返回 M01-E006（SERVICE_UNAVAILABLE，503），前端保留页面骨架并提示失败；令牌加载异常返回 M01-E007 走 static 基线。两者均不导致白屏的结构性依赖（theme.js 不抛出、不参与路由）已核对。「保留结构并提示」的最终确认需浏览器执行，未执行。"
+    },
+    {
+      "caseId": "521",
+      "ruleIds": [
+        "RC-FT002-22"
+      ],
+      "status": "未执行",
+      "comment": "文档类页面深色排版渲染（RC-FT002-24）。属界面单元视觉规格走查。",
+      "proof": "未执行：需浏览器渲染与截图。"
+    },
+    {
+      "caseId": "522",
+      "ruleIds": [
+        "RC-FT002-23"
+      ],
+      "status": "通过",
+      "comment": "列表行悬停高亮必须为明度提升而非改变色相（RC-FT002-23）。",
+      "proof": "脚本计算两包悬停令牌的 HSL：dark-gold 包 bg-primary #0B0B0D（H=240.0 L=4.7）→ bg-hover #23232E（H=240.0 L=15.9），ΔH=0.0°、ΔL=+11.2，为纯明度提升；accent-gold #D4AF37 → accent-gold-hover #F0C75E，ΔH=2.7°、ΔL=+13.1，色相稳定。全部 hover 规则取 --ca-color-bg-hover 或 --ca-color-accent-gold-hover，无改变色相的写法。浅色包 ΔL=−1.0pp 的措辞口径问题另见问题清单。"
+    },
+    {
+      "caseId": "523",
+      "ruleIds": [
+        "RC-FT002-24"
+      ],
+      "status": "部分通过",
+      "comment": "弹窗、抽屉、下拉与轻提示的令牌使用应一致（D-015 统一视觉规格）。",
+      "proof": "静态核对：.modal/.drawer/.dropdown/.toast 相关规则一律以 var(--ca-*) 引用令牌，无硬编码色值（经 D-018 门禁覆盖）；.toast 按 info/warn/error 取语义色令牌且以 textContent 写入。跨组件视觉一致性需渲染后走查，未执行。"
+    },
+    {
+      "caseId": "524",
+      "ruleIds": [
+        "RC-FT002-25"
+      ],
+      "status": "未执行",
+      "comment": "可视化图表配色取自令牌色板 color-chart-1…6（RC-FT002-25）。",
+      "proof": "未执行且无法执行：全量检索 src/main/resources/static 未发现任何图表/画布/可视化渲染实现，色板令牌无消费方；「可区分」的判定标准亦未定义（DQ-007）。AC-FT002-27 建议标注为本期不适用/延后验证。"
+    },
+    {
+      "caseId": "525",
+      "ruleIds": [
+        "RC-FT002-26"
+      ],
+      "status": "部分通过",
+      "comment": "打印或导出应回退为浅底深字（RC-FT002-26，反向）。",
+      "proof": "静态契约核对 css/print.css 的 @media print 块：主背景 --ca-color-bg-primary=#FFFFFF、正文 --ca-color-text-primary=#172033；--ca-gradient-gold 与 5 个 --ca-shadow-* 全部置 none（不输出大面积深色背景）；5 个 --ca-motion-duration-* 全部置 0ms；强调色压深为 #7A5C12；语义色取浅色基线取值；共覆盖 35 个同名令牌且未改选择器。实际打印预览/导出件需浏览器打印管线，未执行；服务端导出（PDF/图片）场景无实现，未覆盖。"
+    },
+    {
+      "caseId": "526",
+      "ruleIds": [
+        "RC-FT002-27"
+      ],
+      "status": "部分通过",
+      "comment": "减弱动效偏好下动效应退化为静态（RC-FT002-27，反向）。",
+      "proof": "静态契约核对 css/tokens.css 的 @media (prefers-reduced-motion: reduce) 块：5 个 --ca-motion-duration-* 全部置 0ms（D-017/C-01）；.skeleton-card{ animation: none; background: var(--ca-color-bg-secondary) }（C-02）；--ca-shadow-glow-gold 未被清零，全部 2 处出现均在基块、未进入 reduce 分支（C-03，保留聚焦可辨识性）。触发操作系统级动效偏好开关的实际观察未执行。"
+    },
+    {
+      "caseId": "527",
+      "ruleIds": [
+        "RC-FT002-28"
+      ],
+      "status": "部分通过",
+      "comment": "遗留硬编码样式应兜底渲染并在自检清单中标记为待适配（RC-FT002-28，反向）。",
+      "proof": "自检载体核对：D-018 门禁默认失败；-Dtheme.scan.skip=true 时只输出完整违规清单（文件、行号、字面量、CSS 选择器上下文）而不失败，可复现、可执行、不随行号漂移失效。当前实测 0 处遗留硬编码，故无待适配项。「遗留硬编码兜底渲染」的实际场景未构造，未执行。另发现游离文件 static/_btn.txt 因后缀不在扫描范围而处于门禁盲区（见问题清单）。"
+    },
+    {
+      "caseId": "528",
+      "ruleIds": [
+        "RC-FT002-29"
+      ],
+      "status": "部分通过",
+      "comment": "信息架构与业务规则不变（RC-FT002-29）。",
+      "proof": "核对通过的部分：路由与接口清单与基线逐条一致（见 TC-39）；本次改动 20 个文件全部为注释与文档字符串（+93/−82 行），无业务逻辑变更；无新增/删除元素的结构性改动。完整的信息架构判定需 DOM 结构比对（V-034），未执行。"
+    },
+    {
+      "caseId": "529",
+      "ruleIds": [
+        "RC-FT002-30"
+      ],
+      "status": "通过",
+      "comment": "交易接口、路由契约与埋点事件名必须不变（RC-FT002-30）。",
+      "proof": "逐条核对路由清单与 D-019/C-04 基线：/api/status、/api/context、/api/projects(GET/POST/PUT)、/api/projects/{id}、/api/projects/current、/api/app-types(GET/POST/PUT/DELETE)、/api/platform-guide、/api/navigation/component、/api/workbench/components 全部存在且未改动；唯一新增为纯只读的 GET /api/theme/tokens。静态资源正常返回 200。无埋点事件改动。注：新增接口与「接口不变」的边界解释待产品确认（DQ-002，见问题清单）。"
+    },
+    {
+      "caseId": "530",
+      "ruleIds": [
+        "RC-FT002-31"
+      ],
+      "status": "通过",
+      "comment": "不得提供用户级主题切换入口，不得新增深色/浅色偏好设置（RC-FT002-31，反向校验）。",
+      "proof": "检索核对：theme.js 不写入任何 localStorage/sessionStorage（工程内 localStorage 用途仅为当前项目与角色，属既有实现）；无任何主题相关的写接口；无主题切换 UI 入口；主题仅由服务端配置 platform.theme.active 决定，且该开关不呈现给最终使用者。"
+    },
+    {
+      "caseId": "531",
+      "ruleIds": [
+        "RC-FT002-32"
+      ],
+      "status": "未执行",
+      "comment": "页面结构与元素位置必须不变（RC-FT002-32）。",
+      "proof": "未执行：需改造前后的 DOM 结构快照比对（V-034）。本阶段仅能证明改动为纯注释（+93/−82 行，无样式规则与结构变更），不构成 DOM 层面的证明。"
+    },
+    {
+      "caseId": "532",
+      "ruleIds": [
+        "RC-FT002-33"
+      ],
+      "status": "未执行",
+      "comment": "M02–M26 界面规格加注与硬编码扫描（RC-FT002-33）。",
+      "proof": "未执行：M02–M26 的模块 Spec 文件不在本工程工作副本内（仅 M01 在工作副本内），文档侧判定无法完成（DQ-010）。模块内的硬编码扫描门禁已覆盖本工程内的静态资源（本工程即 M01 载体）。"
+    },
+    {
+      "caseId": "533",
+      "ruleIds": [
+        "RC-FT002-34"
+      ],
+      "status": "未执行",
+      "comment": "模块自有配色条款应改为引用本能力（RC-FT002-34，反向）。",
+      "proof": "未执行：模块自有配色条款清单未提供且目标 Spec 文件不在工作副本内（DQ-010 / DQ-013①），改写对象无法确定。"
+    },
+    {
+      "caseId": "534",
+      "ruleIds": [
+        "RC-FT002-01",
+        "RC-FT002-04",
+        "RC-FT002-05"
+      ],
+      "status": "部分通过",
+      "comment": "令牌初始化到变更联动的端到端验证（AC-FT002-06/07/08 等）。",
+      "proof": "已证实的链路：默认启动 → 200 且 theme=dark-gold（初始化）；改配置为 light 重启 → 200 且 theme=light、color-bg-primary=#F3F5F7（变更联动）；变异包改值 → 接口下发值随之改变。未证实的末端环节为浏览器内的实际视觉变色与首帧无闪烁，需渲染环境，未执行。"
+    },
+    {
+      "caseId": "535",
+      "ruleIds": [
+        "RC-FT002-06",
+        "RC-FT002-07",
+        "RC-FT002-08"
+      ],
+      "status": "通过",
+      "comment": "回退开关与两类令牌异常降级互不干扰（AC-FT002-39，反向校验）。",
+      "proof": "三条路径独立实测且互不干扰：① 回退开关 --platform.theme.active=light → 200、theme=light、浅色取值；② 整包失败 --platform.theme.active=bogus-theme → 503 M01-E007 + error 日志，不影响①的取值正确性；③ 单令牌非法（变异包）→ 仍为 200，受影响令牌回退、warnings=6、tokens=77，不触发 503。三场景均以端口级杀进程隔离，启动前断言 18080 空闲，排除残留进程干扰。"
+    }
+  ]
+}

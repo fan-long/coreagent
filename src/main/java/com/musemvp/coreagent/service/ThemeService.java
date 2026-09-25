@@ -33,12 +33,12 @@ import com.musemvp.coreagent.support.TokenScope;
 import com.musemvp.coreagent.support.TokenValidator;
 
 /**
- * 视觉主题令牌的装载、校验、回退与缓存，见详细设计 §3.4。
+ * 视觉主题令牌的装载、校验、回退与缓存，见 DESIGN-FT-002 §4 D-003。
  *
  * <p>令牌在启动期一次性装载（{@link #load()}），逐项校验并构建不可变缓存；运行期只读，无锁竞争、
  * 无数据库访问。单个令牌非法时降级为该令牌的回退值并计入 {@code warnings}，页面不失败；
  * 整包级失败（资源缺失／解析失败／主题标识非法／回退令牌不完备）时接口返回 M01-E007，
- * 前端以 {@code css/tokens.css} 静态基线渲染（§2.3 三级兜底）。
+ * 前端以 {@code css/tokens.css} 静态基线渲染（DD-004 的第三级降级）。
  */
 @Service
 public class ThemeService {
@@ -47,13 +47,13 @@ public class ThemeService {
 
     private static final String DEFAULT_THEME = "dark-gold";
 
-    /** 可运维切换的主题标识（§3.5）。 */
+    /** 可运维切换的主题标识（D-006/C-01）。 */
     private static final Set<String> SUPPORTED_THEMES = Set.of("dark-gold", "light");
 
     /**
-     * 必填回退令牌集合（§2.3）：每组至少 1 个回退令牌，且清单中的这些必须存在。
+     * 必填回退令牌集合（D-001/C-05）：每组至少 1 个回退令牌，且清单中的这些必须存在。
      *
-     * <p>缺失或自身校验不通过即判定整包失败——回退链路是 DP-FT002-02「三级兜底不白屏」的最后一环，
+     * <p>缺失或自身校验不通过即判定整包失败——回退链路是 DD-004「三级降级不白屏」的最后一环，
      * 缺了它单个令牌非法时就没有可用的兜底取值。
      */
     private static final Set<String> REQUIRED_FALLBACK_TOKENS = Set.of(
@@ -86,7 +86,7 @@ public class ThemeService {
     }
 
     /**
-     * 启动期装载令牌包（§3.4.1 装载流程）。
+     * 启动期装载令牌包（D-003/P-01…P-08）。
      *
      * <p>失败不阻断应用启动：令牌是呈现层配置，业务功能不依赖它。失败仅把缓存置空，接口随后返回
      * M01-E007，前端沿用静态基线包着色。
@@ -94,9 +94,9 @@ public class ThemeService {
     @PostConstruct
     public void load() {
         String active = properties.getActive();
-        // 主题标识非法属整包级失败（§3.5 异常表），**不**静默回退默认主题：静默回退会把运维的配置
+        // 主题标识非法属整包级失败（D-003/C-03），**不**静默回退默认主题：静默回退会把运维的配置
         // 错误藏起来，全站仍是黑金、无人察觉。此处判定失败，前端按 M01-E007 降级到 tokens.css
-        // 静态基线（同为黑金）并 toast 提示，观感一致但失败可见（§6.5 不静默失败）。
+        // 静态基线（同为黑金）并 toast 提示，观感一致但失败可见（DD-004 不静默失败）。
         // 该白名单同时是路径安全边界：active 只可能取到此处的枚举值，不会拼出越界的资源路径。
         if (!SUPPORTED_THEMES.contains(active)) {
             this.tokenSet = null;
@@ -105,7 +105,7 @@ public class ThemeService {
             return;
         }
         if (!DEFAULT_THEME.equals(active)) {
-            // 审计：便于排查「为何全站是浅色」（§3.5、§6.5）
+            // 审计：便于排查「为何全站是浅色」（D-003/P-02、DD-004）
             log.info("主题回退开关生效：active={}，全站渲染为浅色基线", active);
         }
 
@@ -135,7 +135,7 @@ public class ThemeService {
         return current;
     }
 
-    /** 按名称取令牌，供后续服务端渲染场景复用（§3.4.1）。 */
+    /** 按名称取令牌，供后续服务端渲染场景复用（D-003）。 */
     public Optional<ThemeTokenVO> resolve(String name) {
         ThemeTokenSetVO current = tokenSet;
         if (current == null || !StringUtils.hasText(name)) {
@@ -166,7 +166,7 @@ public class ThemeService {
     }
 
     /**
-     * 逐令牌校验 → 回退 → 汇编为不可变令牌包（§3.4.1 装载流程 3~5）。
+     * 逐令牌校验 → 回退 → 汇编为不可变令牌包（D-003/P-05…P-08）。
      *
      * @throws IllegalStateException 整包级失败，由 {@link #load()} 捕获并降级为 M01-E007
      */
@@ -255,7 +255,7 @@ public class ThemeService {
         return fallbacks;
     }
 
-    /** 必填回退令牌必须存在且自身合法，否则整包失败（§3.4.2）。 */
+    /** 必填回退令牌必须存在且自身合法，否则整包失败（D-003/C-05）。 */
     private void verifyRequiredFallbacks(List<Entry> entries, Map<TokenGroup, String> groupFallbacks) {
         Set<String> validNames = new HashSet<>();
         for (Entry entry : entries) {
@@ -270,7 +270,7 @@ public class ThemeService {
         }
     }
 
-    /** 令牌包文件结构（§5.2）：顶层元信息 + 令牌扁平数组。 */
+    /** 令牌包文件结构（D-001/C-01）：顶层元信息 + 令牌扁平数组。 */
     @JsonIgnoreProperties(ignoreUnknown = true)
     record TokenPack(String theme, String themeName, String version, List<TokenDefinition> tokens) {
     }
@@ -321,7 +321,7 @@ public class ThemeService {
          * @param effectiveValue 实际生效取值：合法令牌为其自身取值，非法令牌为同组回退取值
          */
         ThemeTokenVO toToken(String effectiveValue) {
-            // 适用范围非法时归一为 GLOBAL 而不是沿用非法值：本期下发的令牌全部为全局令牌（§5.2），
+            // 适用范围非法时归一为 GLOBAL 而不是沿用非法值：本期下发的令牌全部为全局令牌（D-001/C-02），
             // 前端也只接受 GLOBAL，下发一个不可识别的取值只会让该令牌在前端被二次丢弃。
             String text = StringUtils.hasText(description) ? description : name;
             return new ThemeTokenVO(group == null ? rawGroup : group.getKey(), name, effectiveValue, text,

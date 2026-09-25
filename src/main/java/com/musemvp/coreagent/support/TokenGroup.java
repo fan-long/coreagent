@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * 视觉主题令牌分组，见详细设计 §2.1。
+ * 视觉主题令牌分组，见 DESIGN-FT-002 §4 D-001/C-04。
  *
- * <p>七组与原始需求 §8「视觉主题令牌 · 令牌分组」的枚举一一对应，组键即令牌包 JSON 中
+ * <p>七组与 DEF-FT002-10「视觉主题令牌 · 令牌分组」的枚举一一对应，组键即令牌包 JSON 中
  * {@code tokens[].group} 的取值，也是前端注入时的分组白名单来源。
  */
 public enum TokenGroup {
@@ -42,7 +42,7 @@ public enum TokenGroup {
         return key;
     }
 
-    /** 按组键解析；未知组键返回空，由调用方按「令牌级回退 + 告警」处理（§3.4.2）。 */
+    /** 按组键解析；未知组键返回空，由调用方按「令牌级回退 + 告警」处理（D-002/C-01）。 */
     public static Optional<TokenGroup> from(String key) {
         return Arrays.stream(values()).filter(group -> group.key.equals(key)).findFirst();
     }

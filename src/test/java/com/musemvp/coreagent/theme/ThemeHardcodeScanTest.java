@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * 硬编码色值静态检查门禁（ft-FT-002 §3.8，对照验收项 AC-ft-FT-002-03）。
+ * 硬编码色值静态检查门禁（DESIGN-FT-002 §4 D-018，对照 AC-FT002-01（V-001）与 AC-FT002-30）。
  *
  * <p>扫描 {@code src/main/resources/static/**} 下全部 {@code .css}、{@code .html}、{@code .js}，
  * 出现 {@code #hex}、{@code rgb()}、{@code rgba()}、{@code hsl()} 字面量即记为违规。
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * <p>白名单仅有两类，且都是令牌体系的必要组成：
  * <ol>
  *   <li>{@code css/tokens.css}、{@code css/tokens-light.css}、{@code css/print.css}——
- *       令牌取值本身就在这里定义，硬编码是它们的职责（设计 §3.8 白名单条款）；</li>
+ *       令牌取值本身就在这里定义，硬编码是它们的职责（D-018/C-02 白名单条款）；</li>
  *   <li>{@code js/core/theme.js} 中的**校验正则定义行**（形如 {@code const HEX = /.../;}）——
  *       这些正则存在的意义就是识别颜色字面量，其源码必然包含 {@code #}、{@code rgba(} 等片段。
  *       设计原文为「按行号白名单」，此处收紧为「按行形态白名单」：只豁免 {@code = /.../} 形式的
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * </ol>
  *
  * <p>失败策略：默认失败；{@code -Dtheme.scan.skip=true} 临时跳过并把违规清单打到构建日志，
- * 供「待适配清单」维护（设计 §3.8）。
+ * 供「待适配清单」维护（D-018/C-04）。
  */
 class ThemeHardcodeScanTest {
 
@@ -182,7 +182,7 @@ class ThemeHardcodeScanTest {
     private String render(List<Violation> violations, int scannedFiles) {
         StringBuilder builder = new StringBuilder();
         builder.append(System.lineSeparator())
-                .append("硬编码色值门禁失败（ft-FT-002 §3.8 / BR-M01-16）：扫描 ")
+                .append("硬编码色值门禁失败（DESIGN-FT-002 D-018/C-01 / BR-M01-16）：扫描 ")
                 .append(scannedFiles).append(" 个静态资源，命中 ")
                 .append(violations.size()).append(" 处。").append(System.lineSeparator())
                 .append("请改用 var(--ca-*) 令牌；确需新增令牌值时，写入 css/tokens.css 与")

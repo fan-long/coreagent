@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * 令牌适用范围，见详细设计 §2.2.1 与 §5.2。
+ * 令牌适用范围，见 DESIGN-FT-002 §4 D-001/C-02 与 D-002/C-05。
  *
- * <p>本期下发的令牌全部为 {@link #GLOBAL}；全局令牌不得被模块覆盖（§2.5 禁止项）。
+ * <p>本期下发的令牌全部为 {@link #GLOBAL}；全局令牌不得被模块覆盖（D-005/C-03 前端仅接受 GLOBAL）。
  */
 public enum TokenScope {
 

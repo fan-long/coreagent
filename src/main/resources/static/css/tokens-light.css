@@ -1,5 +1,5 @@
 /*
- * 浅色基线令牌包（与 resources/theme/light.json 同值），见详细设计 §3.5。
+ * 浅色基线令牌包（与 resources/theme/light.json 同值），见 DESIGN-FT-002 §4 D-001/C-07。
  *
  * 用途：观察期（至 2026-10-02）内的运维级回退。**默认不被 index.html 引用**——主路径的回退是
  * 修改 platform.theme.active=light 后重启，前端刷新即可；本文件仅在「运维手动切换静态资源引用」

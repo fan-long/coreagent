@@ -1,8 +1,8 @@
 /*
- * 基础样式（黑金主题），见 ft-FT-002 §4.4。
+ * 基础样式（黑金主题），见 DESIGN-FT-002 §4 D-007（全局基础样式层与视觉层级映射）。
  *
  * 全部颜色、字体、间距、圆角、描边、阴影与动效一律以 var(--ca-*) 引用令牌，禁止硬编码色值
- * （BR-M01-16 / ft-FT-002-B1，由 ThemeHardcodeScanTest 门禁）。
+ * （BR-M01-16，由 ThemeHardcodeScanTest 门禁，见 D-018）。
  * 令牌基线见 css/tokens.css（首帧生效），运行期覆盖见 theme.js 注入的 <style id="ca-theme-runtime">。
  */
 
@@ -170,7 +170,7 @@ pre {
   background-color: var(--ca-color-accent-gold-hover);
 }
 
-/* 禁用态：以令牌取值降级表达，不使用整体 opacity（BR-M01-17、§4.4.2）。
+/* 禁用态：以令牌取值降级表达，不使用整体 opacity（BR-M01-17、D-007/C-01）。
    文字取 color-text-disabled 对 color-bg-hover 为 4.58:1，满足 AA。 */
 .refresh-button:disabled {
   cursor: wait;

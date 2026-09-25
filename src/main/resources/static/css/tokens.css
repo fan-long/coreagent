@@ -1,11 +1,12 @@
 /*
- * 静态基线令牌包（黑金，与 resources/theme/dark-gold.json 同值），见详细设计 §4.1。
+ * 静态基线令牌包（黑金，与 resources/theme/dark-gold.json 同值），见 DESIGN-FT-002 §4 D-001/C-07。
  *
- * 本文件是三级兜底链路的第①级：同步加载且在全部样式表之前，保证**首帧即黑金**、不出现先浅后深的闪烁；
- * 接口失败时也由它着色，而不是落到浏览器默认色。
+ * 本文件是 DD-004 三级降级的基线：同步加载且在全部样式表之前，保证**首帧即黑金**、不出现先浅后深的闪烁；
+ * 接口失败时也由它着色，而不是落到浏览器默认色（D-005）。
  *
  * 唯一允许出现颜色字面量的文件之一（连同 tokens-light.css、print.css 的令牌覆盖块），
- * 见 ThemeHardcodeScanTest 白名单。令牌名称一经写入即固化，重命名等同于破坏性变更（§2.1）。
+ * 见 ThemeHardcodeScanTest 白名单（D-018/C-02）。令牌名称一经写入即固化，
+ * 重命名等同于破坏性变更（D-001/C-03）。
  */
 
 :root {
@@ -102,8 +103,9 @@
 }
 
 /*
- * 弱动效退化（§4.7）：全部过渡均引用 motion-duration-* 令牌，故一次覆盖即全站退化为无动画。
- * 辉光（--ca-shadow-glow-gold）是静态阴影而非动画，此处不覆盖，选中/聚焦的可辨识性不受影响。
+ * 弱动效退化（DESIGN-FT-002 §4 D-017）：全部过渡均引用 motion-duration-* 令牌，
+ * 故一次覆盖即全站退化为无动画（D-017/C-01）。辉光（--ca-shadow-glow-gold）是静态阴影而非动画，
+ * 此处不覆盖，选中/聚焦的可辨识性不受影响（D-017/C-03）。
  */
 @media (prefers-reduced-motion: reduce) {
   :root {
@@ -115,7 +117,7 @@
   }
 
   /* 骨架微光关闭后转为静态占位；「正在加载…」文案由 notice.js 的 renderLoading 保留，
-     以 aria-live 区域维持可感知性（PQ-FT002-08 的落地方式）。 */
+     以 aria-live 区域维持可感知性（D-017/C-02 的落地方式）。 */
   .skeleton-card {
     animation: none;
     background: var(--ca-color-bg-secondary);

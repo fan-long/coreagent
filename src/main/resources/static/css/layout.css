@@ -1,5 +1,6 @@
 /*
- * 布局样式：顶栏 / 侧边栏 / 工作台卡片网格 / 弹窗 / 置灰态（ft-FT-002 §4.4、§4.5）。
+ * 布局样式：顶栏 / 侧边栏 / 工作台卡片网格 / 弹窗 / 置灰态
+ * （DESIGN-FT-002 §4 D-007 全局基础样式层，与 D-008…D-015 各界面单元视觉规格）。
  *
  * 依赖 tokens.css 中的令牌定义与 app.css 中的 .app-header / .brand-mark 既有定义，
  * 本文件在其后加载以覆盖布局部分。全部取值均为 var(--ca-*) 引用，禁止硬编码色值（BR-M01-16）。
@@ -431,7 +432,7 @@
     color var(--ca-motion-duration-fast) var(--ca-motion-ease-standard);
 }
 
-/* 禁用态令牌降级：删除整体 opacity，文字对背景 4.58:1 满足 AA（BR-M01-17、§4.4.2）。
+/* 禁用态令牌降级：删除整体 opacity，文字对背景 4.58:1 满足 AA（BR-M01-17、D-007/C-01）。
    选择器特异性高于 .button-primary / .button-secondary，故对三类按钮同时生效。 */
 .button:disabled {
   cursor: not-allowed;
@@ -442,7 +443,7 @@
 }
 
 /* 主按钮：金色渐变 + 深色文字。background-color 单独给出，
-   打印令牌包把渐变置为 none 后仍有可读底色（§4.6）。 */
+   打印令牌包把渐变置为 none 后仍有可读底色（D-016/C-03）。 */
 .button-primary {
   color: var(--ca-color-text-on-accent);
   background-color: var(--ca-color-accent-gold);
@@ -531,7 +532,7 @@
 }
 
 /* 未启用组件：置灰但保留点击（BR-M01-02）。
-   不以整体 opacity 降透明——文字与图标转为禁用令牌，保证可读且不出现不可控对比度（BR-M01-17、§4.4.2）。 */
+   不以整体 opacity 降透明——文字与图标转为禁用令牌，保证可读且不出现不可控对比度（BR-M01-17、D-007/C-01）。 */
 .component-card.is-disabled {
   background: var(--ca-color-bg-secondary);
   border-color: var(--ca-color-border-neutral);

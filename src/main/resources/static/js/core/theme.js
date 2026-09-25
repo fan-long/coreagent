@@ -1,5 +1,5 @@
 /**
- * 视觉主题令牌装载器，见详细设计 §4.2、§4.3。
+ * 视觉主题令牌装载器，见 DESIGN-FT-002 §4 D-005。
  *
  * 职责：拉取令牌 → 校验 → 原子注入 CSS 自定义属性 → 失败时静默降级到 css/tokens.css 静态基线。
  *
@@ -8,7 +8,7 @@
  * - 注入方式为「生成／整体替换单个 <style id="ca-theme-runtime">」，一次 DOM 操作原子生效，
  *   既不产生逐个 setProperty 的中间态闪烁，也便于失败时整体移除回退到基线；
  * - 取值在服务端已校验一次，此处**再校验一次**：令牌值最终会写入 <style> 元素，任何一环失守
- *   都可能形成 CSS 注入面（§6.4 纵深防御）。
+ *   都可能形成 CSS 注入面（DD-005 纵深防御）。
  */
 import { http } from './http.js';
 import { showToast } from './notice.js';
@@ -18,7 +18,7 @@ const STYLE_ID = 'ca-theme-runtime';
 const DEFAULT_THEME = 'dark-gold';
 const FAILURE_MESSAGE = '主题令牌加载失败，已使用默认黑金主题';
 
-/** 分组白名单：与后端 TokenGroup 枚举一致（§3.4.2）。 */
+/** 分组白名单：与后端 TokenGroup 枚举一致（D-001/C-04）。 */
 const GROUPS = ['color', 'font', 'space', 'radius', 'border', 'shadow', 'motion'];
 
 /** 令牌名称：kebab-case，与后端 TokenValidator.NAME 同规则。 */
@@ -41,7 +41,7 @@ const SHADOW_LENGTH = /^(0|-?\d+(\.\d+)?px)$/;
 const FONT_FAMILY = /^[A-Za-z0-9 ,\-_. "']+$/;
 const FONT_FEATURE = /^"[a-z]{4}"\s+(0|1|on|off)(,\s*"[a-z]{4}"\s+(0|1|on|off))*$/;
 
-/** 注入的令牌值一律不得含分号、花括号、尖括号（§6.4）。 */
+/** 注入的令牌值一律不得含分号、花括号、尖括号（DD-005）。 */
 const DANGEROUS = /[;{}<>]/;
 
 let inflight = null;
@@ -92,7 +92,7 @@ async function doLoad() {
   try {
     payload = await http.get(TOKEN_PATH);
   } catch (error) {
-    // 503 M01-E007、超时与网络异常同一处理：保留静态基线渲染，提示失败，不白屏（§4.9）
+    // 503 M01-E007、超时与网络异常同一处理：保留静态基线渲染，提示失败，不白屏（D-005/C-06）
     console.warn(`[theme] 令牌接口不可用：${error && error.message}`);
     return degrade();
   }
@@ -130,7 +130,7 @@ async function doLoad() {
   return lastResult;
 }
 
-/** 整包失败：移除运行时样式（回到 tokens.css 基线）+ 用户可见提示，不静默（§6.5）。 */
+/** 整包失败：移除运行时样式（回到 tokens.css 基线）+ 用户可见提示，不静默（DD-004）。 */
 function degrade() {
   removeRuntimeStyle();
   activeTheme = DEFAULT_THEME;
@@ -162,7 +162,7 @@ function buildDeclarations(payload) {
       return;
     }
     seen.add(`${group}:${name}`);
-    // 全局令牌不得被模块覆盖：本期只接受 GLOBAL（§2.5、§4.3 分组白名单）
+    // 全局令牌不得被模块覆盖：本期只接受 GLOBAL（D-005/C-03）
     if (token.scope !== 'GLOBAL') {
       warnings.push(warning(group, name, 'TOKEN_SCOPE_INVALID'));
       return;
@@ -200,7 +200,7 @@ function removeRuntimeStyle() {
   }
 }
 
-/** 组内取值白名单校验，规则与后端 TokenValidator 一一对应（§3.4.2）。 */
+/** 组内取值白名单校验，规则与后端 TokenValidator 一一对应（D-002/C-02）。 */
 function isValidValue(group, name, value) {
   if (DANGEROUS.test(value)) {
     return false;

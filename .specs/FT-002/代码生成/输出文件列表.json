@@ -1,0 +1,32 @@
+{
+  "后端": [
+    "src/main/java/com/musemvp/coreagent/api/ThemeController.java",
+    "src/main/java/com/musemvp/coreagent/api/dto/ThemeTokenSetVO.java",
+    "src/main/java/com/musemvp/coreagent/api/dto/ThemeTokenVO.java",
+    "src/main/java/com/musemvp/coreagent/api/dto/ThemeTokenWarningVO.java",
+    "src/main/java/com/musemvp/coreagent/service/ThemeService.java",
+    "src/main/java/com/musemvp/coreagent/support/ErrorCode.java",
+    "src/main/java/com/musemvp/coreagent/support/ThemeProperties.java",
+    "src/main/java/com/musemvp/coreagent/support/TokenGroup.java",
+    "src/main/java/com/musemvp/coreagent/support/TokenScope.java",
+    "src/main/java/com/musemvp/coreagent/support/TokenValidator.java",
+    "src/main/resources/application.yml",
+    "src/test/java/com/musemvp/coreagent/theme/ThemeHardcodeScanTest.java"
+  ],
+  "前端": [
+    "src/main/resources/static/index.html",
+    "src/main/resources/static/css/tokens.css",
+    "src/main/resources/static/css/tokens-light.css",
+    "src/main/resources/static/css/app.css",
+    "src/main/resources/static/css/layout.css",
+    "src/main/resources/static/css/print.css",
+    "src/main/resources/static/js/main.js",
+    "src/main/resources/static/js/core/theme.js"
+  ],
+  "测试报告": [
+    ".specs/FT-002/代码生成/测试报告.md"
+  ],
+  "问题清单": [
+    ".specs/FT-002/代码生成/问题清单.json"
+  ]
+}

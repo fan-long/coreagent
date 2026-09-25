@@ -1,0 +1,162 @@
+{
+  "designUnitNames": {
+    "D-001": "视觉主题令牌定义与令牌包资源",
+    "D-002": "令牌校验规则构件",
+    "D-003": "令牌装载、回退与告警服务",
+    "D-004": "令牌只读下发接口",
+    "D-005": "前端令牌注入与静态基线降级",
+    "D-006": "主题配置与运维级回退开关",
+    "D-007": "全局基础样式层与视觉层级映射",
+    "D-008": "顶栏视觉规格",
+    "D-009": "工作台与组件卡片视觉规格",
+    "D-010": "环境管理侧边栏视觉规格",
+    "D-011": "组件信息侧边栏视觉规格",
+    "D-012": "实施说明页视觉规格",
+    "D-013": "项目切换弹窗视觉规格",
+    "D-014": "页面头部与文档阅读视觉规格",
+    "D-015": "弹窗、抽屉、下拉与提示统一视觉规格",
+    "D-016": "打印与导出回退样式",
+    "D-017": "减弱动效适配",
+    "D-018": "遗留硬编码兜底与自检扫描",
+    "D-019": "不变量守护与回归基线核对",
+    "D-020": "模块界面规格加注与配色条款回写"
+  },
+  "rules": [
+    {
+      "ruleId": "RC-FT002-01",
+      "designUnitIds": ["D-005", "D-007", "D-018"]
+    },
+    {
+      "ruleId": "RC-FT002-02",
+      "designUnitIds": ["D-001", "D-002"]
+    },
+    {
+      "ruleId": "RC-FT002-03",
+      "designUnitIds": ["D-001", "D-002", "D-003"]
+    },
+    {
+      "ruleId": "RC-FT002-04",
+      "designUnitIds": ["D-003", "D-004", "D-005"]
+    },
+    {
+      "ruleId": "RC-FT002-05",
+      "designUnitIds": ["D-001", "D-004", "D-005", "D-007"]
+    },
+    {
+      "ruleId": "RC-FT002-06",
+      "designUnitIds": ["D-003", "D-006"]
+    },
+    {
+      "ruleId": "RC-FT002-07",
+      "designUnitIds": ["D-002", "D-003", "D-005"]
+    },
+    {
+      "ruleId": "RC-FT002-08",
+      "designUnitIds": ["D-003", "D-004", "D-005", "D-015"]
+    },
+    {
+      "ruleId": "RC-FT002-09",
+      "designUnitIds": ["D-007", "D-008", "D-009", "D-010", "D-011", "D-013", "D-014", "D-015"]
+    },
+    {
+      "ruleId": "RC-FT002-10",
+      "designUnitIds": ["D-001", "D-007", "D-012", "D-014"]
+    },
+    {
+      "ruleId": "RC-FT002-11",
+      "designUnitIds": ["D-007", "D-009", "D-010", "D-011", "D-013"]
+    },
+    {
+      "ruleId": "RC-FT002-12",
+      "designUnitIds": ["D-001", "D-007", "D-013", "D-014", "D-016"]
+    },
+    {
+      "ruleId": "RC-FT002-13",
+      "designUnitIds": ["D-007", "D-009", "D-012", "D-015"]
+    },
+    {
+      "ruleId": "RC-FT002-14",
+      "designUnitIds": ["D-007", "D-008", "D-009", "D-010", "D-011", "D-013", "D-014"]
+    },
+    {
+      "ruleId": "RC-FT002-15",
+      "designUnitIds": ["D-008"]
+    },
+    {
+      "ruleId": "RC-FT002-16",
+      "designUnitIds": ["D-009"]
+    },
+    {
+      "ruleId": "RC-FT002-17",
+      "designUnitIds": ["D-010"]
+    },
+    {
+      "ruleId": "RC-FT002-18",
+      "designUnitIds": ["D-011"]
+    },
+    {
+      "ruleId": "RC-FT002-19",
+      "designUnitIds": ["D-012"]
+    },
+    {
+      "ruleId": "RC-FT002-20",
+      "designUnitIds": ["D-013"]
+    },
+    {
+      "ruleId": "RC-FT002-21",
+      "designUnitIds": ["D-014"]
+    },
+    {
+      "ruleId": "RC-FT002-22",
+      "designUnitIds": ["D-012", "D-014"]
+    },
+    {
+      "ruleId": "RC-FT002-23",
+      "designUnitIds": ["D-007", "D-014"]
+    },
+    {
+      "ruleId": "RC-FT002-24",
+      "designUnitIds": ["D-013", "D-015"]
+    },
+    {
+      "ruleId": "RC-FT002-25",
+      "designUnitIds": ["D-001"]
+    },
+    {
+      "ruleId": "RC-FT002-26",
+      "designUnitIds": ["D-016"]
+    },
+    {
+      "ruleId": "RC-FT002-27",
+      "designUnitIds": ["D-017"]
+    },
+    {
+      "ruleId": "RC-FT002-28",
+      "designUnitIds": ["D-005", "D-018"]
+    },
+    {
+      "ruleId": "RC-FT002-29",
+      "designUnitIds": ["D-019"]
+    },
+    {
+      "ruleId": "RC-FT002-30",
+      "designUnitIds": ["D-004", "D-019"]
+    },
+    {
+      "ruleId": "RC-FT002-31",
+      "designUnitIds": ["D-004", "D-006", "D-019"]
+    },
+    {
+      "ruleId": "RC-FT002-32",
+      "designUnitIds": ["D-007", "D-016", "D-019"]
+    },
+    {
+      "ruleId": "RC-FT002-33",
+      "designUnitIds": ["D-018", "D-019", "D-020"]
+    },
+    {
+      "ruleId": "RC-FT002-34",
+      "designUnitIds": ["D-020"]
+    }
+  ]
+}

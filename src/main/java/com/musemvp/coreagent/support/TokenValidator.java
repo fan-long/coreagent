@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * 令牌校验器，见详细设计 §3.4.2。
+ * 令牌校验器，见 DESIGN-FT-002 §4 D-002。
  *
  * <p>令牌值最终会被前端写入 {@code <style>} 元素，是本次变更新增的唯一注入面。服务端与前端各做一次
- * 白名单校验（纵深防御，§6.4）：服务端保证下发的数据可信，前端 {@code theme.js} 再做一次同规则校验。
+ * 白名单校验（纵深防御，DD-005）：服务端保证下发的数据可信，前端 {@code theme.js} 再做一次同规则校验。
  *
  * <p>本类只回答「合法 / 非法 + 原因码」，令牌级回退与告警由 {@code ThemeService} 处理。
  */
@@ -40,7 +40,7 @@ public class TokenValidator {
     /** 令牌缺失（回退令牌或必填令牌未定义）。 */
     public static final String REASON_MISSING = "TOKEN_MISSING";
 
-    /** 令牌名称：kebab-case，组内唯一（§2.1）。 */
+    /** 令牌名称：kebab-case，组内唯一（D-002/C-06）。 */
     private static final Pattern NAME = Pattern.compile("^[a-z][a-z0-9]*(-[a-z0-9]+)*$");
 
     private static final Pattern HEX = Pattern.compile("^#[0-9a-fA-F]{6}$");
@@ -91,7 +91,7 @@ public class TokenValidator {
         return isValidValue(group, name.trim(), value.trim()) ? null : REASON_VALUE_INVALID;
     }
 
-    /** 按组（必要时再按令牌名细分）校验取值形态，见 §3.4.2 的取值一列。 */
+    /** 按组（必要时再按令牌名细分）校验取值形态，见 D-002/C-02 的取值一列。 */
     public boolean isValidValue(TokenGroup group, String name, String value) {
         return switch (group) {
             case COLOR -> isColor(value) || isLinearGradient(value);
@@ -104,14 +104,14 @@ public class TokenValidator {
         };
     }
 
-    /** 颜色：{@code #RRGGBB} 或 {@code rgba()}（§3.4.2）。 */
+    /** 颜色：{@code #RRGGBB} 或 {@code rgba()}（D-002/C-02）。 */
     public boolean isColor(String value) {
         return HEX.matcher(value).matches() || RGBA.matcher(value).matches();
     }
 
     /**
-     * 金色渐变（{@code gradient-gold}）。§2.2.1 把 {@code gradient-gold} 归入色板组，但其取值形态为
-     * {@code linear-gradient()}，是 §3.4.2「色板取值为 #RRGGBB 或 rgba()」的一条显式扩展：
+     * 金色渐变（{@code gradient-gold}）。D-001/C-04 把 {@code gradient-gold} 归入色板组，但其取值形态为
+     * {@code linear-gradient()}，是 D-002/C-02「色板取值为 #RRGGBB 或 rgba()」的一条显式扩展：
      * 角度段固定为 {@code {n}deg}，色标段固定为「合法色值 + 百分比」，不含任何自由文本，
      * 因此不扩大注入面。
      */
@@ -156,7 +156,7 @@ public class TokenValidator {
         return false;
     }
 
-    /** 间距须为 px，且为 4 的正整数倍（§3.4.2 的 4px 基数梯度）。 */
+    /** 间距须为 px，且为 4 的正整数倍（D-002/C-02 的 4px 基数梯度）。 */
     private boolean isSpace(String value) {
         if (!PX.matcher(value).matches()) {
             return false;
